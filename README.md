@@ -2,6 +2,7 @@
 
 A step by step reference guide with all of the steps and command line prompts required for setting up a wagtail site with the following:
 - A virtual environment.
+- Setting up python-decouple in order to avoid having secret keys and database passwords displayed in your settings files when using Github.
 - Working with Django models
 - Adding django models to the admin page
 - Adding a root menu for a group of django models - eg. a folder named 'Properties' with models inside such as 'Commercial, Residential' etc.
