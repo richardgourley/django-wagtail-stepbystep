@@ -18,7 +18,7 @@ Go into your folder of virtual environment projects.
 
 (All commands are shown using Linux/ Mac - these initial setup commands will be different for Windows.  Wagtail or Django specific commands shown later will be the same on all systems eg. 'python manage.py runserver' etc.)
 
-`code(cd Dev)`
+`cd Dev`
 
 2. Check your default version of Python in the command line.
 
