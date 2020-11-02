@@ -16,12 +16,44 @@ A step by step reference guide with all of the steps and command line prompts re
 I use a folder called 'dev'. 
 Go into your folder of virtual environment projects.
 
-(All commands are shown using Linux/ Mac - these initial setup commands will be different for Windows.  Wagtail or Django specific commands shown later will be the same on all systems eg. 'python manage.py runserver' etc.)
-
+`mkdir Dev`
 `cd Dev`
 
-2. Check your default version of Python in the command line.
+(All commands are shown using Linux/ Mac - these initial setup commands will be different for Windows.  Wagtail or Django specific commands shown later will be the same on all systems eg. 'python manage.py runserver' etc.)
 
-python3 --version
+2. Check that you have python3 installed on your machine with this command.
+
+`python3 --version`
 
 If this doesn't return a version number or specifies a version lower than 3.5 - download a newer version of Python.
+
+3. Create a virtual environment in your chosen projects folder.
+
+You can set this up by using 'virtualenv' or 'venv'. I use 'virtualenv'.
+You might already have either or both of the above installed on your machine.
+
+A) VIRTUALENV
+- Check if you have 'virtualenv' installed on your machine by checking the version number.
+
+`virtualenv --version`
+
+- If you have this installed, you can create a virtual environment (specifying the use of Python3 because some machines use Python2 as default!)
+
+`virtualenv projectfolder -p python3`
+
+B) VENV
+- You can try to create a virtual environment by typing: 
+
+`python3 -m venv projectfolder`
+
+- NOTE: 'venv' should come with Python3 but on some systems such as Debian/ Ubuntu you will need to run 'apt-get install python3-venv' to install the 'python3-venv' package.
+
+4. A folder called 'projectfolder' should have been created inside your 'Dev' folder or whatever folder you have created to store your virtual environment projects from step 1.
+
+`cd projectfolder`
+`source bin/activate`
+
+On Windows the command to activate your virtual environment will be different, something similar to:
+
+`mysite\env\Scripts\activate.bat`
+
