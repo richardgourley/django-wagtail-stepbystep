@@ -12,22 +12,23 @@ A step by step reference guide with all of the steps and command line prompts re
 
 ## STEP BY STEP GUIDE
 
-1. *If required, create a folder of choice for storing projects that contain your virtual environment projects.*
+1. **If required, create a folder of choice for storing projects that contain your virtual environment projects.**
 I use a folder called 'dev'. 
 Go into your folder of virtual environment projects.
 
 `mkdir Dev`
+
 `cd Dev`
 
 (All commands are shown using Linux/ Mac - these initial setup commands will be different for Windows.  Wagtail or Django specific commands shown later will be the same on all systems eg. 'python manage.py runserver' etc.)
 
-2. *Check that you have python3 installed on your machine with this command.*
+2. **Check that you have python3 installed on your machine with this command.**
 
 `python3 --version`
 
 If this doesn't return a version number or specifies a version lower than 3.5 - download a newer version of Python.
 
-3. *Create a virtual environment in your chosen projects folder.*
+3. **Create a virtual environment in your chosen projects folder.**
 
 You can set this up by using 'virtualenv' or 'venv'. I use 'virtualenv'.
 You might already have either or both of the above installed on your machine.
@@ -48,12 +49,23 @@ B) VENV
 
 - NOTE: 'venv' should come with Python3 but on some systems such as Debian/ Ubuntu you will need to run 'apt-get install python3-venv' to install the 'python3-venv' package.
 
-4. *A folder called 'projectfolder' should have been created inside your 'Dev' folder or whatever folder you have created to store your virtual environment projects from step 1. Go into this folder and activate your virtual environment.*
+4. **A folder called 'projectfolder' should have been created inside your 'Dev' folder or whatever folder you have created to store your virtual environment projects from step 1. Go into this folder and activate your virtual environment.**
 
 `cd projectfolder`
+
 `source bin/activate`
 
 On Windows the command to activate your virtual environment will be different, something similar to:
 
 `mysite\env\Scripts\activate.bat`
+
+5. **Install wagtail**
+With our virtual environment up and running, the command line should say:
+
+(projectfolder) ...../Dev/projectfolder
+
+Now we will use the pip installer to install wagtail:
+
+`pip install wagtail`
+
 
