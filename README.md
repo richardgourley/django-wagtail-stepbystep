@@ -12,10 +12,12 @@ A step by step reference guide with all of the steps and command line prompts re
 
 ## STEP BY STEP GUIDE
 
-1. If required, create a folder of choice for storing projects with virtual environments. 
-Go into this folder (commands shown using Linux/ Mac, follow equivalent windows command line instructions.)
+1. If required, create a folder of choice for storing projects that contain your virtual environment projects.
+I use a folder called 'dev'. 
+Go into your folder of virtual environment projects.
+(All commands are shown using Linux/ Mac - these initial setup commands will be different for Windows.  Wagtail or Django specific commands shown later will be the same on all systems eg. 'python manage.py runserver' etc.)
 
-cd Dev
+> cd Dev
 
 2. Check your default version of Python in the command line.
 
