@@ -60,12 +60,65 @@ On Windows the command to activate your virtual environment will be different, s
 `mysite\env\Scripts\activate.bat`
 
 5. **Install wagtail**
+
 With our virtual environment up and running, the command line should say:
 
 (projectfolder) ...../Dev/projectfolder
 
-Now we will use the pip installer to install wagtail:
+Now use the inluded pip installer to install wagtail:
 
 `pip install wagtail`
+
+6. **Start a new website project**
+
+`wagtail start mysite`
+
+7. **Look at the folder structure of the project**
+
+projectfolder/
+    bin/
+    include/
+    lib/
+    mysite/
+        home/
+        mysite/
+        search/
+        .dockerignore
+        DockerFile
+        manage.py
+        requirements.txt
+    share/
+
+You will see that you have 2 mysite/ directories - 1 is inside projectfolder/ and the
+other is inside the mysite/ directory.
+
+To avoid confusion, I'll refer to either:
+a) The outer mysite directory - containing our 'manage.py' file.
+b) The inner mysite directory - containing our settings files.
+
+8. **Go into the outer mysite directory**
+
+`cd mysite`
+
+9. **Wagtail automatically adds a requirements.txt file. To check any other requirements are installed enter the following command.**
+
+`pip install -r requirements.txt`
+
+10. **Install python decouple**
+
+Python decouple allows you to keep all sensitive project information in 1 file that you can ask github to ignore (ie. never display sensitive information in a repository).
+
+`pip install python-decouple`
+
+11. **Install mysqlclient**
+
+This connects our wagtail project to a MySQL database.
+(You can use sqllite which comes automatically with Django, or you can use another database such as Postrgres)
+
+`pip install mysqlclient`
+
+
+
+
 
 
