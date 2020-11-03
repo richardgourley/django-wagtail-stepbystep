@@ -135,12 +135,9 @@ We also want to add any other files such as auto generated folders such as migra
 Add this to your .gitignore file:
 
 `
-# Ignore .ev file
 .ev
-# Ignore docker files for this project - using virtualenv
 DockerFile
 .dockerignore
-# Ignore auto generated folders
 __pycache__/
 migrations/
 `
