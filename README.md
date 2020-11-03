@@ -93,7 +93,7 @@ projectfolder/
 
 You will see that you have 2 mysite/ directories - later in this guide, I'll refer to them as either:
 
-- 'projectfoler/mysite' (contains 'manage.py' file.)
+- 'projectfolder/mysite' (contains 'manage.py' file.)
 
 - 'projectfolder/mysite/mysite/' (contains all settings files.)
 
@@ -130,17 +130,17 @@ If you are using github for version control, it's important to create a .gitigno
 
 We are going to create a '.env' file in the next steps which will contain sensitive project information.
 
-We also want to add any other files such as auto generated folders such as migrate/
+We also want to add any other files such as auto generated folders such as migrations/
 
 Add this to your .gitignore file:
 
-`
+```
 .ev
 DockerFile
 .dockerignore
 __pycache__/
 migrations/
-`
+```
 
 14. **Set up a MySQL database for the project and assign user priveliges.**
 
@@ -152,10 +152,10 @@ CREATE USER newusername@localhost IDENTIFIED BY 'password'
 
 Now, create the database and grant all priveliges to the user created above.
 
-`
+```
 CREATE DATABASE mysite CHARACTER SET UTF8;
 GRANT ALL ON mysite.* TO newusername@localhost;
-`
+```
 
 NOTE!!! You will also need to grant priveliges for the testing database which will be created if you run tests.
 
@@ -164,7 +164,7 @@ NOTE!!! You will also need to grant priveliges for the testing database which wi
 You can find your SECRET KEY inside 'projectfolder/mysite/mysite/settings/dev.py'.  
 Add your secret key and your database details as shown below.
 
-`
+```
 SECRET_KEY=12345etc.
 DEBUG=True
 DB_NAME=mysite
@@ -172,7 +172,7 @@ DB_USER=newusername
 DB_PASSWORD=password
 DB_HOST=127.0.0.1
 PORT=3306
-`
+```
 
 The db host and port number might be different with different setups.
 
@@ -188,14 +188,14 @@ from decouple import config
 
 In 'projectfolder/mysite/mysite/settings/dev.py' replace the SECRET KEY and DEBUG with:
 
-`
+```
 DEBUG = config('DEBUG', cast=bool)
 SECRET_KEY = config('SECRET_KEY')
-`
+```
 
 In 'projectfolder/mysite/mysite/settings/base.py' replace the database with this information to setup your MySQL database:
 
-`
+```
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -209,7 +209,7 @@ DATABASES = {
         }
     }
 } 
-`
+```
 
 18. **Perform first migration**
 
@@ -221,4 +221,17 @@ python manage.py migrate
 
 NOTE! Subsequent migrations require 'python manage.py makemigrations' to be run before.
 
-19. 
+19. **Create a super user account for the admin**
+
+A superuser account will grant you all priveliges inside the Wagtail admin.
+
+Enter this and create a username and password
+
+`python manage.py createsuperuser`
+
+20. **Test server is up and running**
+
+`python manage.py runserver`
+
+You should see a message giving you the URL of your site to visit.
+
