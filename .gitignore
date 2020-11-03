@@ -1,0 +1,10 @@
+# Ignore .ev file
+.ev
+
+# Ignore docker files for this project - using virtualenv
+DockerFile
+.dockerignore
+
+# Ignore auto generated folders
+__pycache__/
+migrations/
