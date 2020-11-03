@@ -75,7 +75,7 @@ Now use the inluded pip installer to install wagtail:
 
 7. **Look at the folder structure of the project**
 
-projectfolder/
+`projectfolder/
     bin/
     include/
     lib/
@@ -87,7 +87,7 @@ projectfolder/
         DockerFile
         manage.py
         requirements.txt
-    share/
+    share/`
 
 You will see that you have 2 mysite/ directories - 1 is inside projectfolder/ and the
 other is inside the mysite/ directory.
