@@ -59,6 +59,8 @@ On Windows the command to activate your virtual environment will be different, s
 
 `mysite\env\Scripts\activate.bat`
 
+==============================================================
+
 5. **Install wagtail**
 
 With our virtual environment up and running, the command line should say:
@@ -142,6 +144,8 @@ __pycache__/
 migrations/
 ```
 
+==============================================================
+
 14. **Set up a MySQL database for the project and assign user priveliges.**
 
 Download MySQL if you don't already have it.  Open up MySQL and create a user, with a username of your choice IF you don't have a user to connect this project to:
@@ -223,6 +227,8 @@ python manage.py migrate
 
 NOTE! Subsequent migrations require 'python manage.py makemigrations' to be run before.
 
+==============================================================
+
 19. **Create a super user account for the admin**
 
 A superuser account will grant you all priveliges inside the Wagtail admin.
@@ -240,5 +246,200 @@ You should see a message giving you the URL of your site to visit.
 =================================================
 
 SETTING UP BOOTSTRAP .SCSS FILES
+
+You need to install 2 dependencies to get bootstrap up and running with .scss variables that make changing basic bootstrap settings much easier and more managable.
+
+21. **Install django_compressor**
+
+`pip install django_compressor`
+
+`pip install django-libsass`
+
+22. **Add 'compressor' to installed apps to use it**
+
+Go to 'projectfolder/mysite/mysite/settings/base.py' and add 'compressor' to installed apps as shown here:
+
+```
+INSTALLED_APPS = [
+    'home',
+    'search',
+    'compressor',
+    ....
+    ....
+]
+```
+
+23. **You also need to modify STATICFILES_FINDERS by adding compressor.finders.CompressorFinder as follows.**
+
+```
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
+```
+
+24. **At the bottom of your 'settings/base.py', activate compress precompilers as follows:**
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
+
+25. **Download bootstrap from getbootstrap.com**
+
+26. **Add bootstrap scss and js files**
+
+27. **Create folders inside 'mysite/static' to add bootstrap files**
+
+Create directories inside the 'css' and 'js' directories of 'projectname/mysite/mysite/static' as follows:
+
+```
+projectfolder/
+  mysite/
+    mysite/
+      static/
+        css/
+          bootstrap/
+            scss/
+        mysite.css
+        js/
+          bootstrap/
+            js/
+        mysite.js
+```
+
+28. **Inside the 'css/bootstrap/scss' directory and the 'js/bootstrap/js' directory copy over the scss files and js files from your bootstrap download.**
+
+29. **Create a 'theme.scss' file where we can import and override bootstrap.scss variables easily.**
+
+Directly inside 'projectfolder/mysite/mysite/static' create a 'theme.scss' file so your directory structure looks like this:
+
+```
+projectfolder/
+  mysite/
+    mysite/
+      static/
+        css/
+          bootstrap/
+            scss/
+        mysite.css
+        js/
+          bootstrap/
+            js/
+        mysite.js
+      theme.scss
+```
+
+30. **Open up the 'theme.scss' created above and modify a few bootstrap variables to test , and import the bootstrap.scss variables**
+
+```
+$primary: purple;
+$secondary: orange;
+
+@import 'css/bootstrap/scss/bootstrap.scss';
+```
+
+=================================================
+
+BASE.HTML
+
+In django and wagtail projects, the base.html file is the html page that calls content from other templates inside {% block content%} and is used as the base of every page.
+
+It contains headers, and you can include a navbar, footer and a sidebar if required.
+
+31. **Check that wagtail automatically created and added a general site css and js file**
+
+You should see this in the base.html file located at 'projectfolder/mysite/mysite/templates':
+
+```
+...
+{# Global stylesheets #}
+<link rel="stylesheet" type="text/css" href="{% static 'css/languageschoolmanager.css' %}">
+
+.....
+
+{# Global javascript #}
+<script type="text/javascript" src="{% static 'js/languageschoolmanager.js' %}"></script>
+
+<body>
+```
+
+32. **Load compress and add our 'theme.scss' file**
+
+In 'base.html' add this at the top under '{% load static wagtailuserbar %}':
+
+`{% load compress %}`
+
+Then after our {# Global stylesheets #} add our compressed scss file:
+
+```
+{% compress css %}
+<link type="text/x-scss" href="{% static 'theme.scss' %}" rel="stylesheet" media="screen">
+{% endcompress %}
+```
+
+33. **Load any Bootstrap JS files as you require them as shown below. Remove ones you don't need.**
+
+In 'base.html', under {# Global javascript #}
+
+```
+{# Bootstrap javascript #}
+<script type="text/javascript" src="{% static 'js/bootstrap/js/src/dropdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap/js/src/carousel.js' %}"></script>
+```
+
+=================================================
+
+34. **Vue.JS - If you only want to use Vue on some pages you can use the {% block extra js%} tags**
+
+In 'base.html' you will see this:
+
+```
+{% block extra_js %}
+   {# Override this in templates to add extra javascript #}
+{% endblock %}
+```
+
+You can add the code below to any template files you create where you want to add Vue.js, and load Vue via a DNS like this:
+
+```
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+{% endblock %}
+```
+
+=================================================
+
+HOME / HOME PAGE
+
+35. **Remove links to welcome page from home page**
+
+In 'projectfolder/mysite/home/templates/home/home_page.html' you can delete the welcome page css link and 'include' welcome page, and all comments..
+
+```
+...
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
+...
+{% comment %}
+Delete the line below if you're just getting started and want to remove the welcome screen!
+{% endcomment %}
+{% include 'home/welcome_page.html' %}
+``` 
+
+36. **Test our bootstrap setup is working**
+
+In 'home/templates/home/home_page.html' add some html with bootstrap classes, within block content tags, similar to below to test our 'themes.scss' file has loaded correctly.
+
+```
+{% block content %}
+<h1 class="text-secondary">Hello world!</h1>
+<h2 class="text-primary">How are you?</h2>
+{% endblock %}
+```
+
+=================================================
 
 
