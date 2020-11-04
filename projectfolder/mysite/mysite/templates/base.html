@@ -1,5 +1,7 @@
 {% load static wagtailuserbar %}
 
+{% load compress %}
+
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
@@ -20,6 +22,10 @@
         {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
 
+        {% compress css %}
+        <link type="text/x-scss" href="{% static 'theme.scss' %}" rel="stylesheet" media="screen">
+        {% endcompress %}
+
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}
         {% endblock %}
@@ -32,6 +38,11 @@
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
+
+        {# Bootstrap javascript #}
+        <script type="text/javascript" src="{% static 'js/bootstrap/js/src/dropdown.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/bootstrap/js/src/carousel.js' %}"></script>
+
 
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
