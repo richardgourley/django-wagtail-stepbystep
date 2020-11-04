@@ -429,7 +429,11 @@ Delete the line below if you're just getting started and want to remove the welc
 {% include 'home/welcome_page.html' %}
 ``` 
 
-36. **Test our bootstrap setup is working**
+36. **Delete unrequired welcome page css**
+
+Delete the 'welcome_page.css' file from 'projectname/mysite/home/static/css/'
+
+37. **Test our bootstrap setup is working**
 
 In 'home/templates/home/home_page.html' add some html with bootstrap classes, within block content tags, similar to below to test our 'themes.scss' file has loaded correctly.
 
