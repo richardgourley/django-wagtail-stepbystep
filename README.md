@@ -135,7 +135,7 @@ We also want to add any other files such as auto generated folders such as migra
 Add this to your .gitignore file:
 
 ```
-.ev
+.env
 DockerFile
 .dockerignore
 __pycache__/
@@ -211,6 +211,8 @@ DATABASES = {
 } 
 ```
 
+NOTE: 
+
 18. **Perform first migration**
 
 This will set up our database tables connected to the database table we created above:
@@ -234,4 +236,9 @@ Enter this and create a username and password
 `python manage.py runserver`
 
 You should see a message giving you the URL of your site to visit.
+
+=================================================
+
+SETTING UP BOOTSTRAP .SCSS FILES
+
 
