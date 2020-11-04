@@ -174,3 +174,4 @@ BASE_URL = 'http://example.com'
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
+
