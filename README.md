@@ -1,14 +1,19 @@
 # Django and Wagtail step by step
 
 A step by step reference guide with all of the steps and command line prompts required for setting up a wagtail site with the following:
+
 - A virtual environment.
 - Setting up python-decouple in order to avoid having secret keys and database passwords displayed in your settings files when using Github.
+
 - Working with Django models
 - Adding django models to the admin page
 - Adding a root menu for a group of django models - eg. a folder named 'Properties' with models inside such as 'Commercial, Residential' etc.
+
 - Setting up a MySQL database (can be left as SQLlite or adapted to Postgres as required) using InnoDB tables instead of ISAM tables.
 - Setting up Bootstrap scss variables using django compress and django sass
 - Setting up Vue.js if you only require it on some pages, rather than creating a full SPA.
+
+- Customizing the wagtail admin with a custom logo, custom welcome message and custom login page message.
 
 ## STEP BY STEP GUIDE
 
@@ -429,9 +434,11 @@ Delete the line below if you're just getting started and want to remove the welc
 {% include 'home/welcome_page.html' %}
 ``` 
 
-36. **Delete unrequired welcome page css**
+36. **Delete unrequired welcome_page.html and welcome_page.css**
 
 Delete the 'welcome_page.css' file from 'projectname/mysite/home/static/css/'
+
+Delete the 'welcome_page.html' file from 'projectname/mysite/home/templates/home/'
 
 37. **Test our bootstrap setup is working**
 
@@ -444,6 +451,100 @@ In 'home/templates/home/home_page.html' add some html with bootstrap classes, wi
 {% endblock %}
 ```
 
+================================================
+
+CUSTOMIZE THE WAGTAIL ADMIN DASHBOARD
+
+Run the server if not running and log in to your wagtail dashboard - url/admin
+
+You can easily modify the logo, the site title and the login page title by creating a dashboard app and extending soem admin templates.
+
+38. **Start a new app called dashboard**
+
+In the command line, with our virtual environment running, enter
+
+`python manage.py startapp dashboard`
+
+
+39. **Delete unneeded files from our dashboard app**
+
+Here, we only need to keep '__init__.py' and 'apps.py', so you can delete 'views.py', 'models.py', 'admin.py', 'tests.py'
+
+40. **Register our new 'dashboard' app**
+
+In 'projectfolder/mysite/mysite/settings/base.py' add dashboard to installed apps:
+
+```
+INSTALLED_APPS = [
+    'home',
+    'search',
+    'compressor',
+
+    'dashboard',
+]
+```
+
+41. **Create an images folder in our site static folder and add a custom logo**
+
+```
+projectfolder/
+  mysite/
+    static/
+      images/
+        custom-logo.jpg
+```
+
+42. **In the dashboard app directory, create a new directory called templates and inside templates, create a directory called wagtailadmin***
+
+```
+projectfolder/
+  mysite/
+    dashboard/
+      templates/
+        wagtailadmin/
+```
+
+43. **In 'dashboard/templates/wagtailadmin/' create a file called 'base.html'**
+
+This extends the admin base html file and we override the branding logo with our own custom one.
+
+```
+{% extends "wagtailadmin/base.html" %}
+
+{% load static %}
+
+{% block branding_logo %}
+  <img src="{% static 'images/custom-logo.jpg' %}" alt="My Site" width="80" />
+{% endblock %}
+```
+
+44. **In 'dashboard/templates/wagtailadmin/' create a file called 'home.html'**
+
+This overrides the welcome message in our admin page:
+
+```
+{% extends "wagtailadmin/home.html" %}
+
+{% block branding_welcome %}Welcome to My Site{% endblock %}
+```
+
+45. **In 'dashboard/templates/wagtailadmin/' create a file called 'login.html'**
+
+This overrides the message you see when you go to log in at the admin page:
+
+```
+{% extends "wagtailadmin/login.html" %}
+
+{% block branding_login %}Sign in to My Site{% endblock %}
+```
+
 =================================================
+
+ADD 'NORMAL' DJANGO MODELS TO THE ADMIN DASHBOARD
+
+MODEL ADMIN - Use modeladmin settings to display normal django models that you can create, update and delete.
+
+You can use this demo as a reference to add any models you like to the Wagtail admin dashboard, and add, update and delete them.
+
 
 
