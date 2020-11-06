@@ -540,11 +540,12 @@ This overrides the message you see when you go to log in at the admin page:
 
 =================================================
 
-ADD 'NORMAL' DJANGO MODELS TO THE ADMIN DASHBOARD
+DJANGO MODELS -
+MODEL ADMIN allows you to add django models to the admin page.
 
-MODEL ADMIN - Use modeladmin settings to display normal django models that you can create, update and delete.
+You can use django fields AND wagtail fields on your models, so you can enhance the best parts of Django with more fields and you can then intergrate your models into Wagtail pages.
 
-You can use this demo as a reference to add any models you like to the Wagtail admin dashboard, and add, update and delete them.
+46. 
 
 
 
