@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'compressor',
     'dashboard',
     'surgeries',
-
+    
+    'wagtail.contrib.modeladmin',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
