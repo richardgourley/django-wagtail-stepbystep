@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'search',
     'compressor',
     'dashboard',
+    'surgeries',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
