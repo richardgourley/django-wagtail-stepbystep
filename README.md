@@ -543,9 +543,165 @@ This overrides the message you see when you go to log in at the admin page:
 DJANGO MODELS -
 MODEL ADMIN allows you to add django models to the admin page.
 
-You can use django fields AND wagtail fields on your models, so you can enhance the best parts of Django with more fields and you can then intergrate your models into Wagtail pages.
+You can use django fields AND wagtail fields on your models, so you can enhance the best parts of Django with more fields and you can then integrate your models into Wagtail pages.
 
-46. 
+Let's create a new app called 'surgeries' and it's models, and create and add models to the admin dashboard under a menu heading called 'MANAGE SURGERIES'
+
+46. **Start new app**
+
+`python manage.py startapp surgeries`
+
+47. **Add 'surgeries' to installed apps**
+
+In 'projectfolder/mysite/mysite/settings/base.py' add 'surgeries' to installed apps
+
+```
+INSTALLED_APPS = [
+    'home',
+    'search',
+    'compressor',
+    'dashboard',
+    'surgeries',
+```
+
+48. **Add model admin to installed apps**
+
+In order to access modeladmin, we also need to add it to installed apps:
+
+```
+INSTALLED_APPS = [
+    'home',
+    'search',
+    'compressor',
+    'dashboard',
+    'surgeries',
+
+    'wagtail.contrib.modeladmin',
+```
+
+49. **Create the models**
+
+Imagine if we had hundreds of surgeries or clinics in various cities around the world.  In this simple example we can add ForeignKeys and ManyToManyFields to link all of the models together making a scalable application.  Add these models to 'surgeries/models.py'
+
+```
+from django.db import models
+
+# Create your models here.
+class MedicalSpecialization(models.Model):
+    name = models.CharField(max_length=255)
+
+class City(models.Model):
+    name = models.CharField(max_length=255)
+
+class Doctor(models.Model):
+    first_name = models.CharField(max_length=255)
+    surname = models.CharField(max_length=255)
+    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
+
+class Surgery(models.Model):
+    surgery_name = models.CharField(max_length=255)
+    address = models.TextField()
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+    doctors = models.ManyToManyField(Doctor, help_text='Select which doctors are based at this surgery.')
+```
+
+50. **Make migrations and migrate**
+
+To set up the new models in the database, run these commands one after the other:
+
+`python manage.py makemigrations`
+
+`python manage.py migrate`
+
+51. **Create 'wagtail_hooks.py'**
+
+To connect our new models to the wagtail admin dashboard, create a new file called 'wagtail_hooks.py' directly inside our 'surgeries' directory.
+
+52. **Set up wagtail hooks imports and import surgery models**
+
+Add these imports to the top of 'surgeries/wagtail_hooks.py'
+
+```
+from wagtail.contrib.modeladmin.options import (
+        ModelAdmin, ModelAdminGroup, modeladmin_register)
+from . models import MedicalSpecialization, City, Doctor, Surgery
+```
+
+53. **Create OBJECTADMIN for each model**
+
+Add an instance of ModelAdmin for each model to 'surgeries/wagtail_hooks.py'.
+
+```
+from wagtail.contrib.modeladmin.options import (
+        ModelAdmin, ModelAdminGroup, modeladmin_register)
+from . models import MedicalSpecialization, City, Doctor, Surgery
+
+class MedicalSpecializationAdmin(ModelAdmin):
+    model = MedicalSpecialization
+    menu_label = 'Medical Specialization'
+    menu_icon = 'user'
+    menu_order = 200
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ('name')
+    list_filter = ('name',)
+    search_fields = ('name')
+
+class CityAdmin(ModelAdmin):
+    model = City
+    menu_label = 'City'
+    menu_icon = 'user'
+    menu_order = 200
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ('name')
+    list_filter = ('name',)
+    search_fields = ('name')
+
+class DoctorAdmin(ModelAdmin):
+    model = Doctor
+    menu_label = 'Doctor'
+    menu_icon = 'user'
+    menu_order = 200
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ('first_name', 'surname', 'specializations')
+    list_filter = ('surname',)
+    search_fields = ('surname')
+
+class SurgeryAdmin(ModelAdmin):
+    model = Surgery
+    menu_label = 'Surgery'
+    menu_icon = 'user'
+    menu_order = 200
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+    list_display = ('surgery_name', 'address', 'city', 'doctors')
+    list_filter = ('surgery_name',)
+    search_fields = ('surgery_name', 'address', 'city', 'doctors')
+```
+
+54. Create a GROUP for all OBJECTADMINS created above 
+
+Now we can create a ModelAdminGroup where we group the objects created above into one directory in the admin.
+
+Add this to the bottom of 'surgeries/wagtail_hooks.py'.
+
+```
+class SurgeryGroup(ModelAdminGroup):
+    menu_label = 'Manage Surgeries'
+    menu_icon = 'folder-open-inverse'  # change as required
+    menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
+    items = (MedicalSpecializationAdmin, CityAdmin, DoctorAdmin, SurgeryAdmin)
+
+modeladmin_register(SurgeryGroup)
+```
+
+This will show the group in the admin menu, when we click it, all of the models in the group appear in a sub menu.
+
+NOTE!! - You can register single objects in the admin (not neccesarily in a group):
+
+`modeladmin_register(DoctorAdmin)`
 
 
 
