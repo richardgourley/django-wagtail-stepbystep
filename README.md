@@ -703,5 +703,80 @@ NOTE!! - You can register single objects in the admin (not neccesarily in a grou
 
 `modeladmin_register(DoctorAdmin)`
 
+=================================================
 
+INTEGRATING DJANGO MODELS INTO THE WAGTAIL 'PAGE' ECOSYSTEM
+
+You can use URLs and Views as you would normally with Django, but if you are using Wagtail, you can create 'Wagtail Pages' where you can define context variables derived from normal django objects.
+
+Here, we are going to create a surgery index page.  We will send all surgeries to this page as a context variable.
+
+55. **Add necessary Page, RichTextField and FieldPanel wagtail imports**
+
+In 'projectfolder/mysite/surgeries/models.py', add these imports at the top.
+
+```
+from wagtail.core.models import Page
+from wagtail.core.fields import RichTextField
+from wagtail.admin.edit_handlers import FieldPanel
+```
+
+56. **Create a 'SurgeryIndexPage' class that inherits from Page**
+
+We create a 'page' and then alter the context variable to contain a list of our surgery models.
+
+In 'surgeries/models.py'
+
+```
+class SurgeryIndexPage(Page):
+    intro = RichTextField(blank=True, help_text='Write a short intro to the surgery index page')
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full")
+    ]
+
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        
+        surgeries = Surgery.objects.all()
+        context['surgeries'] = surgeries
+        return context
+```
+
+56. **Create a template folder and template**
+
+Set up your structure and add your template like this so that Django's templating lookup will find your template:
+
+```
+surgeries/
+  templates/
+    surgeries/
+      surgery_index_page.html
+```
+
+NOTE!: The naming convention is crucial when working with Wagtail. The template name must match the name of the Class in our models page as shown above.
+
+57. **Loop through all surgeries in the surgery index page.**
+
+
+58. **Create a 'child page' of 'Surgery Index Page' type**
+
+a) In the wagtail admin menu, click 'Pages'. (In some versions of Wagtail, this could be called 'Explorer')
+
+b) Click on the 'Home' folder.
+
+c) Click on 'Add child page'
+
+d) Click on 'Surgery Index page'
+
+e) Give your page a name and write an intro.
+
+In this case, your new template will appear as the page title you gave the page, eg. url/surgeries
+
+Wagtail is hierarchical so you can create a subfolder of 'Home' and then create any page type you like, eg. url/news/new-team-member-joins
+
+You can also create any other page types you like, such as 'doctors_index.html'
+
+You could also retrieve 'counts' from the database and add that to any page template you create eg. 6 doctors, 7 medical specializations etc. and display this data on your homepage for example.
 
