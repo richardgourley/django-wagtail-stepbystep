@@ -10,7 +10,7 @@ class MedicalSpecializationAdmin(ModelAdmin):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('name')
-    list_filter = ('name',)
+    list_filter = ('name')
     search_fields = ('name')
 
 class CityAdmin(ModelAdmin):
@@ -21,7 +21,7 @@ class CityAdmin(ModelAdmin):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('name')
-    list_filter = ('name',)
+    list_filter = ('name')
     search_fields = ('name')
 
 class DoctorAdmin(ModelAdmin):
@@ -32,7 +32,7 @@ class DoctorAdmin(ModelAdmin):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('first_name', 'surname', 'specializations')
-    list_filter = ('surname',)
+    list_filter = ('surname')
     search_fields = ('surname')
 
 class SurgeryAdmin(ModelAdmin):
@@ -43,7 +43,7 @@ class SurgeryAdmin(ModelAdmin):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('surgery_name', 'address', 'city', 'doctors')
-    list_filter = ('surgery_name',)
+    list_filter = ('surgery_name')
     search_fields = ('surgery_name', 'address', 'city', 'doctors')
 
 class SurgeryGroup(ModelAdminGroup):
