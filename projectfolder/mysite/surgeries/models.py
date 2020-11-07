@@ -1,4 +1,22 @@
 from django.db import models
+from wagtail.core.models import Page
+from wagtail.core.fields import RichTextField
+from wagtail.admin.edit_handlers import FieldPanel
+
+class SurgeryIndexPage(Page):
+    intro = RichTextField(blank=True, help_text='Write a short intro to the surgery index page')
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full")
+    ]
+
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        
+        surgeries = Surgery.objects.all()
+        context['surgeries'] = surgeries
+        return context
 
 # Create your models here.
 class MedicalSpecialization(models.Model):
