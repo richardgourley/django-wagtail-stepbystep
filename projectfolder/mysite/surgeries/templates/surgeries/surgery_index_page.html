@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!-- Loads wagtail template tags -->
+{% load wagtailcore_tags %}
+
+{% block body_class %}surgery-index-page{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="container">
+{% if surgeries %}
+  {% for surgery in surgeries %}
+    <h2>{{ surgery.surgery_name }}</h2>
+    <h3>ADDRESS: {{ surgery.address}}</h3>
+    <p>{{ surgery.city }}</p>
+    <p>WE HAVE THESE DOCTORS AT THIS LOCATION:</p>
+    <ul>
+      {% for doctor in surgery.doctors_set.all %}
+        <li>Hello world</li>
+        <li>{{ doctor.first_name }}</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endif %}
+</div>
+
+{% endblock content %}
