@@ -11,7 +11,6 @@ class SurgeryIndexPage(Page):
     ]
 
     def get_context(self, request):
-        # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
         
         surgeries = Surgery.objects.all()
@@ -26,6 +25,9 @@ class MedicalSpecialization(models.Model):
         return self.name
 
 class City(models.Model):
+    class Meta:
+        verbose_name = 'city'
+        verbose_name_plural = 'cities'
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -39,6 +41,9 @@ class Doctor(models.Model):
     def __str__(self):
         return self.first_name + ' ' + self.surname
 
+    def specializations_list(self):
+        return ', '.join(specialization.name for specialization in self.specializations.all())
+
 class Surgery(models.Model):
     class Meta:
         verbose_name = 'surgery'
@@ -50,3 +55,6 @@ class Surgery(models.Model):
 
     def __str__(self):
         return self.surgery_name
+
+    def doctors_list(self):
+        return ', '.join(doctor.surname for doctor in self.doctors.all())
