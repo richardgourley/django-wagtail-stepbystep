@@ -15,13 +15,16 @@
 {% if surgeries %}
   {% for surgery in surgeries %}
     <h2>{{ surgery.surgery_name }}</h2>
-    <h3>ADDRESS: {{ surgery.address}}</h3>
+    <h4>ADDRESS:</h4>
+    <p>{{ surgery.address}}</p>
     <p>{{ surgery.city }}</p>
     <p>WE HAVE THESE DOCTORS AT THIS LOCATION:</p>
     <ul>
-      {% for doctor in surgery.doctors_set.all %}
-        <li>Hello world</li>
-        <li>{{ doctor.first_name }}</li>
+      {% for doctor in surgery.doctors.all %}
+        <li><strong>{{ doctor.first_name }} {{ doctor.surname}}</strong></li>
+        {% for specialization in doctor.specializations.all %}
+          <p>{{ specialization.name }}</p>
+        {% endfor %}
       {% endfor %}
     </ul>
   {% endfor %}
