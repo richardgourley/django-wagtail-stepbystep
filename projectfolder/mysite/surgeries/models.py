@@ -22,16 +22,28 @@ class SurgeryIndexPage(Page):
 class MedicalSpecialization(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 class City(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 class Doctor(models.Model):
     first_name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
     specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
 
+    def __str__(self):
+        return self.first_name + ' ' + self.surname
+
 class Surgery(models.Model):
     surgery_name = models.CharField(max_length=255)
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
     doctors = models.ManyToManyField(Doctor, help_text='Select which doctors are based at this surgery.')
+
+    def __str__(self):
+        return self.surgery_name
