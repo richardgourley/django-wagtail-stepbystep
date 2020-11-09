@@ -581,7 +581,12 @@ INSTALLED_APPS = [
 
 49. **Create the models**
 
-Imagine if we had hundreds of surgeries or clinics in various cities around the world.  In this simple example we can add ForeignKeys and ManyToManyFields to link all of the models together making a scalable application.  Add these models to 'surgeries/models.py'
+In this simple example we can add ForeignKeys and ManyToManyFields to link all of the models together making a scalable application.  Add these models to 'surgeries/models.py'
+
+NOTE: Verbose plural names added to 'city' and 'surgery' models to correctly display the plural name of each in the admin.
+
+
+NOTE: Extra methods created in 'Doctor' and 'Surgery' to display the ManyToMany fields in the admin dashboard list_display.
 
 ```
 from django.db import models
@@ -590,19 +595,44 @@ from django.db import models
 class MedicalSpecialization(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 class City(models.Model):
+    class Meta:
+        verbose_name = 'city'
+        verbose_name_plural = 'cities'
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 class Doctor(models.Model):
     first_name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
     specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
 
+    def __str__(self):
+        return self.first_name + ' ' + self.surname
+
+    def specializations_list(self):
+        return ', '.join(specialization.name for specialization in self.specializations.all())
+
 class Surgery(models.Model):
+    class Meta:
+        verbose_name = 'surgery'
+        verbose_name_plural = 'surgeries'
     surgery_name = models.CharField(max_length=255)
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
     doctors = models.ManyToManyField(Doctor, help_text='Select which doctors are based at this surgery.')
+
+    def __str__(self):
+        return self.surgery_name
+
+    def doctors_list(self):
+        return ', '.join(doctor.surname for doctor in self.doctors.all())
+
 ```
 
 50. **Make migrations and migrate**
@@ -631,6 +661,8 @@ from . models import MedicalSpecialization, City, Doctor, Surgery
 
 Add an instance of ModelAdmin for each model to 'surgeries/wagtail_hooks.py'.
 
+NOTE! In 'DoctorAdmin' and 'SurgeryAdmin' list_display, we add in methods from the models in 'surgeries/models.py' in order to display ManyToMany Fields as a string in the admin page. 
+
 ```
 from wagtail.contrib.modeladmin.options import (
         ModelAdmin, ModelAdminGroup, modeladmin_register)
@@ -643,7 +675,7 @@ class MedicalSpecializationAdmin(ModelAdmin):
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('name')
+    list_display = ('name',)
     list_filter = ('name',)
     search_fields = ('name')
 
@@ -654,7 +686,7 @@ class CityAdmin(ModelAdmin):
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('name')
+    list_display = ('name',)
     list_filter = ('name',)
     search_fields = ('name')
 
@@ -665,7 +697,7 @@ class DoctorAdmin(ModelAdmin):
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('first_name', 'surname', 'specializations')
+    list_display = ('first_name', 'surname', 'specializations_list')
     list_filter = ('surname',)
     search_fields = ('surname')
 
@@ -676,9 +708,9 @@ class SurgeryAdmin(ModelAdmin):
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('surgery_name', 'address', 'city', 'doctors')
+    list_display = ('surgery_name', 'address', 'city', 'doctors_list')
     list_filter = ('surgery_name',)
-    search_fields = ('surgery_name', 'address', 'city', 'doctors')
+    search_fields = ('surgery_name', 'address', 'city')
 ```
 
 54. Create a GROUP for all OBJECTADMINS created above 
@@ -740,7 +772,6 @@ class SurgeryIndexPage(Page):
     ]
 
     def get_context(self, request):
-        # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
         
         surgeries = Surgery.objects.all()
@@ -763,6 +794,31 @@ NOTE!: The naming convention is crucial when working with Wagtail. The template 
 
 57. **Loop through all surgeries in the surgery index page.**
 
+```
+{% block content %}
+
+<div class="container">
+{% if surgeries %}
+  {% for surgery in surgeries %}
+    <h2>{{ surgery.surgery_name }}</h2>
+    <h4>ADDRESS:</h4>
+    <p>{{ surgery.address}}</p>
+    <p>{{ surgery.city }}</p>
+    <h4>DOCTORS:</h4>
+    <ul>
+      {% for doctor in surgery.doctors.all %}
+        <li><strong>{{ doctor.first_name }} {{ doctor.surname}}</strong></li>
+        {% for specialization in doctor.specializations.all %}
+          <p>{{ specialization.name }}</p>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endif %}
+</div>
+
+{% endblock content %}
+```
 
 58. **Create a 'child page' of 'Surgery Index Page' type**
 
