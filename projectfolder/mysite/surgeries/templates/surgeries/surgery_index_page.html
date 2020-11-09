@@ -18,7 +18,7 @@
     <h4>ADDRESS:</h4>
     <p>{{ surgery.address}}</p>
     <p>{{ surgery.city }}</p>
-    <p>WE HAVE THESE DOCTORS AT THIS LOCATION:</p>
+    <h4>DOCTORS:</h4>
     <ul>
       {% for doctor in surgery.doctors.all %}
         <li><strong>{{ doctor.first_name }} {{ doctor.surname}}</strong></li>
