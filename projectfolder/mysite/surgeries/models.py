@@ -40,6 +40,9 @@ class Doctor(models.Model):
         return self.first_name + ' ' + self.surname
 
 class Surgery(models.Model):
+    class Meta:
+        verbose_name = 'surgery'
+        verbose_name_plural = 'surgeries'
     surgery_name = models.CharField(max_length=255)
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
