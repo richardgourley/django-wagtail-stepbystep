@@ -707,9 +707,13 @@ NOTE!! - You can register single objects in the admin (not neccesarily in a grou
 
 INTEGRATING DJANGO MODELS INTO THE WAGTAIL 'PAGE' ECOSYSTEM
 
-You can use URLs and Views as you would normally with Django, but if you are using Wagtail, you can create 'Wagtail Pages' where you can define context variables derived from normal django objects.
+You can use URLs and Views as you would normally with Django, but if you are using Wagtail, you can create 'Wagtail Pages'.
 
-Here, we are going to create a surgery index page.  We will send all surgeries to this page as a context variable.
+Wagtail pages are hierarchical.  You can create a template, and then create a page instance of that template as a child page of any other page. 
+
+Here, we are going to create a surgery index page, with all surgeries returned in the pages context variable.
+
+Then, we will create a page instance of our surgery index page as a child page of 'Home'.
 
 55. **Add necessary Page, RichTextField and FieldPanel wagtail imports**
 
@@ -723,7 +727,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 
 56. **Create a 'SurgeryIndexPage' class that inherits from Page**
 
-We create a 'page' and then alter the context variable to contain a list of our surgery models.
+We create a 'page' class and then return a context variable containing a list of our surgery models.
 
 In 'surgeries/models.py'
 
@@ -774,9 +778,11 @@ e) Give your page a name and write an intro.
 
 In this case, your new template will appear as the page title you gave the page, eg. url/surgeries
 
-Wagtail is hierarchical so you can create a subfolder of 'Home' and then create any page type you like, eg. url/news/new-team-member-joins
+Wagtail is hierarchical so you could create a subfolder of 'Home' called doctors and then create and add a doctors search page type giving this url:
 
-You can also create any other page types you like, such as 'doctors_index.html'
+`eg. url/doctors/search-doctors`
 
 You could also retrieve 'counts' from the database and add that to any page template you create eg. 6 doctors, 7 medical specializations etc. and display this data on your homepage for example.
+
+
 
