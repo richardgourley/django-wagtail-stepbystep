@@ -586,7 +586,7 @@ In this simple example we can add ForeignKeys and ManyToManyFields to link all o
 NOTE: Verbose plural names added to 'city' and 'surgery' models to correctly display the plural name of each in the admin.
 
 
-NOTE: Extra methods created in 'Doctor' and 'Surgery' to display the ManyToMany fields in the admin dashboard list_display.
+NOTE: Extra methods (doctors_list in 'Surgery' and specializations_list in 'Doctor') to display the ManyToMany and ForeignKey fields in the admin dashboard list_display.
 
 ```
 from django.db import models
@@ -607,17 +607,6 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
-class Doctor(models.Model):
-    first_name = models.CharField(max_length=255)
-    surname = models.CharField(max_length=255)
-    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
-
-    def __str__(self):
-        return self.first_name + ' ' + self.surname
-
-    def specializations_list(self):
-        return ', '.join(specialization.name for specialization in self.specializations.all())
-
 class Surgery(models.Model):
     class Meta:
         verbose_name = 'surgery'
@@ -625,13 +614,24 @@ class Surgery(models.Model):
     surgery_name = models.CharField(max_length=255)
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
-    doctors = models.ManyToManyField(Doctor, help_text='Select which doctors are based at this surgery.')
-
+    
     def __str__(self):
         return self.surgery_name
-
+    
     def doctors_list(self):
-        return ', '.join(doctor.surname for doctor in self.doctors.all())
+        return ', '.join(f'{doctor.first_name} {doctor.surname}' for doctor in self.doctor_set.all())
+
+class Doctor(models.Model):
+    first_name = models.CharField(max_length=255)
+    surname = models.CharField(max_length=255)
+    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
+    surgery = models.ForeignKey(Surgery, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.first_name + ' ' + self.surname
+
+    def specializations_list(self):
+        return ', '.join(specialization.name for specialization in self.specializations.all())
 
 ```
 
@@ -670,7 +670,7 @@ from . models import MedicalSpecialization, City, Doctor, Surgery
 
 class MedicalSpecializationAdmin(ModelAdmin):
     model = MedicalSpecialization
-    menu_label = 'Medical Specialization'
+    menu_label = 'Medical Specializations'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
@@ -681,7 +681,7 @@ class MedicalSpecializationAdmin(ModelAdmin):
 
 class CityAdmin(ModelAdmin):
     model = City
-    menu_label = 'City'
+    menu_label = 'Cites'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
@@ -692,18 +692,18 @@ class CityAdmin(ModelAdmin):
 
 class DoctorAdmin(ModelAdmin):
     model = Doctor
-    menu_label = 'Doctor'
+    menu_label = 'Doctors'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('first_name', 'surname', 'specializations_list')
+    list_display = ('first_name', 'surname', 'specializations_list', 'surgery')
     list_filter = ('surname',)
     search_fields = ('surname')
 
 class SurgeryAdmin(ModelAdmin):
     model = Surgery
-    menu_label = 'Surgery'
+    menu_label = 'Surgeries'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
@@ -806,7 +806,7 @@ NOTE!: The naming convention is crucial when working with Wagtail. The template 
     <p>{{ surgery.city }}</p>
     <h4>DOCTORS:</h4>
     <ul>
-      {% for doctor in surgery.doctors.all %}
+      {% for doctor in surgery.doctor_set.all %}
         <li><strong>{{ doctor.first_name }} {{ doctor.surname}}</strong></li>
         {% for specialization in doctor.specializations.all %}
           <p>{{ specialization.name }}</p>
