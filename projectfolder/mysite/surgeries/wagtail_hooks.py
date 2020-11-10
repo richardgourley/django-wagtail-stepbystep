@@ -4,7 +4,7 @@ from . models import MedicalSpecialization, City, Doctor, Surgery
 
 class MedicalSpecializationAdmin(ModelAdmin):
     model = MedicalSpecialization
-    menu_label = 'Medical Specialization'
+    menu_label = 'Medical Specializations'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
@@ -15,7 +15,7 @@ class MedicalSpecializationAdmin(ModelAdmin):
 
 class CityAdmin(ModelAdmin):
     model = City
-    menu_label = 'City'
+    menu_label = 'Cites'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
@@ -26,7 +26,7 @@ class CityAdmin(ModelAdmin):
 
 class DoctorAdmin(ModelAdmin):
     model = Doctor
-    menu_label = 'Doctor'
+    menu_label = 'Doctors'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
@@ -37,7 +37,7 @@ class DoctorAdmin(ModelAdmin):
 
 class SurgeryAdmin(ModelAdmin):
     model = Surgery
-    menu_label = 'Surgery'
+    menu_label = 'Surgeries'
     menu_icon = 'user'
     menu_order = 200
     add_to_settings_menu = False
