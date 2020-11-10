@@ -20,7 +20,7 @@
     <p>{{ surgery.city }}</p>
     <h4>DOCTORS:</h4>
     <ul>
-      {% for doctor in surgery.doctors.all %}
+      {% for doctor in surgery.doctor_set.all %}
         <li><strong>{{ doctor.first_name }} {{ doctor.surname}}</strong></li>
         {% for specialization in doctor.specializations.all %}
           <p>{{ specialization.name }}</p>
