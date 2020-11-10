@@ -40,14 +40,12 @@ class Surgery(models.Model):
     surgery_name = models.CharField(max_length=255)
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
-
+    
     def __str__(self):
         return self.surgery_name
-
-    '''
-    def list_of_doctors(self):
-        return ', '.join(doctor.surname for doctor in self.doctors.all())
-    '''
+    
+    def doctors_list(self):
+        return ', '.join(f'{doctor.first_name} {doctor.surname}' for doctor in self.doctor_set.all())
 
 class Doctor(models.Model):
     first_name = models.CharField(max_length=255)
