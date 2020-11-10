@@ -33,17 +33,6 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
-class Doctor(models.Model):
-    first_name = models.CharField(max_length=255)
-    surname = models.CharField(max_length=255)
-    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
-
-    def __str__(self):
-        return self.first_name + ' ' + self.surname
-
-    def specializations_list(self):
-        return ', '.join(specialization.name for specialization in self.specializations.all())
-
 class Surgery(models.Model):
     class Meta:
         verbose_name = 'surgery'
@@ -51,10 +40,25 @@ class Surgery(models.Model):
     surgery_name = models.CharField(max_length=255)
     address = models.TextField()
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
-    doctors = models.ManyToManyField(Doctor, help_text='Select which doctors are based at this surgery.')
 
     def __str__(self):
         return self.surgery_name
 
-    def doctors_list(self):
+    '''
+    def list_of_doctors(self):
         return ', '.join(doctor.surname for doctor in self.doctors.all())
+    '''
+
+class Doctor(models.Model):
+    first_name = models.CharField(max_length=255)
+    surname = models.CharField(max_length=255)
+    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
+    surgery = models.ForeignKey(Surgery, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.first_name + ' ' + self.surname
+
+    def specializations_list(self):
+        return ', '.join(specialization.name for specialization in self.specializations.all())
+
+
