@@ -31,7 +31,7 @@ class DoctorAdmin(ModelAdmin):
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('first_name', 'surname', 'specializations_list')
+    list_display = ('first_name', 'surname', 'specializations_list', 'surgery')
     list_filter = ('surname',)
     search_fields = ('surname')
 
@@ -42,7 +42,7 @@ class SurgeryAdmin(ModelAdmin):
     menu_order = 200
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('surgery_name', 'address', 'city', 'doctors_list')
+    list_display = ('surgery_name', 'address', 'city')
     list_filter = ('surgery_name',)
     search_fields = ('surgery_name', 'address', 'city')
 
