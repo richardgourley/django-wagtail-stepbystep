@@ -2,6 +2,8 @@
 
 A step by step reference guide with all of the steps and command line prompts required for setting up a wagtail site with the following:
 
+- Customizing the wagtail admin with a custom logo, custom welcome message and custom login page message.
+
 - A virtual environment.
 - Setting up python-decouple in order to avoid having secret keys and database passwords displayed in your settings files when using Github.
 
@@ -12,8 +14,6 @@ A step by step reference guide with all of the steps and command line prompts re
 - Setting up a MySQL database (can be left as SQLlite or adapted to Postgres as required) using InnoDB tables instead of ISAM tables.
 - Setting up Bootstrap scss variables using django compress and django sass
 - Setting up Vue.js if you only require it on some pages, rather than creating a full SPA.
-
-- Customizing the wagtail admin with a custom logo, custom welcome message and custom login page message.
 
 ## STEP BY STEP GUIDE
 
