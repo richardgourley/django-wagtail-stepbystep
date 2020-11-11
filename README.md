@@ -292,7 +292,9 @@ COMPRESS_PRECOMPILERS = (
 
 25. **Download bootstrap from getbootstrap.com**
 
-26. **Add bootstrap scss and js files**
+26. **Open up the scss and js folders in your bootstrap download**
+
+NOTE! For demonstration purposes, I haven't included all files from the 'scss' folder.  I have ommited the 'utilities', 'mixins' and 'vendor' directories - you would need these in a full project using bootstrap!
 
 27. **Create folders inside 'mysite/static' to add bootstrap files**
 
