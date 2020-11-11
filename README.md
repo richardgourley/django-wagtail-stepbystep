@@ -106,6 +106,8 @@ You will see that you have 2 mysite/ directories - later in this guide, I'll ref
 
 8. **Go into the outer mysite directory**
 
+(You should currently be in 'projectfolder'.  Navigate to 'projectfolder/mysite' - tou should be in the directory containing the file 'manage.py')
+
 `cd mysite`
 
 9. **Wagtail automatically adds a requirements.txt file. To check any other requirements are installed enter the following command.**
@@ -254,7 +256,7 @@ SETTING UP BOOTSTRAP .SCSS FILES
 
 You need to install 2 dependencies to get bootstrap up and running with .scss variables that make changing basic bootstrap settings much easier and more managable.
 
-21. **Install django_compressor**
+21. **Install django_compressor and django-libsass**
 
 `pip install django_compressor`
 
@@ -361,12 +363,12 @@ You should see this in the base.html file located at 'projectfolder/mysite/mysit
 ```
 ...
 {# Global stylesheets #}
-<link rel="stylesheet" type="text/css" href="{% static 'css/languageschoolmanager.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
 
 .....
 
 {# Global javascript #}
-<script type="text/javascript" src="{% static 'js/languageschoolmanager.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/mysite.js' %}"></script>
 
 <body>
 ```
