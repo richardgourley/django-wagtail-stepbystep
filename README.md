@@ -15,6 +15,8 @@ A step by step reference guide with all of the steps and command line prompts re
 - Setting up Bootstrap scss variables using django compress and django sass
 - Setting up Vue.js if you only require it on some pages, rather than creating a full SPA.
 
+- Creating a menu of existing pages marked 'show in menu'
+
 ## STEP BY STEP GUIDE
 
 1. **If required, create a folder of choice for storing projects that contain your virtual environment projects.**
@@ -843,6 +845,127 @@ Wagtail is hierarchical so you could create a subfolder of 'Home' called doctors
 `eg. url/doctors/search-doctors`
 
 You could also retrieve 'counts' from the database and add that to any page template you create eg. 6 doctors, 7 medical specializations etc. and display this data on your homepage for example.
+
+=================================================
+
+CREATING A MENU OF WAGTAIL PAGES DYNAMICALLY 
+
+You can create your own template tags in django and wagtail to retrieve pages and display them with a link in a navigation menu.
+
+When you create a page in Wagtail, you have the option to show a page in menus or not.
+
+59. **Set our surgeries page to be shown in menus**
+
+In the admin menu, select 'Pages/Home' and click edit on our 'Surgeries' page.
+
+On the tab 'Promote', select true for the option 'Show in Menus'.
+
+60. **Create a templatetags folder**
+
+Template tags must be created in an app that is registered in 'INSTALLED_APPS' in our settings file.  It seems more logical to use our 'home' app rather than 'surgeries' so create a template tags directory inside with a structure like this:
+
+```
+projectfolder/
+  mysite/
+    home/
+      static/
+      templates/
+      templatetags/
+```
+
+61. **Create an '__init__.py' file**
+
+In the 'templatetags' directory, create a new blank file called '__init__.py'.
+We need to do this so Django will know it is a module and will read the python files inside this directory.
+
+62. **Create a templatetags file called 'pages_menu.py'**
+
+In the 'templatetags' directory create a file called 'pages_menu.py'.
+
+We register the template tag, then with an inclusion tag, instruct django to pass the returned results from the function to 'tags/pages_menu.html'.
+
+In the function, we first get the site root page (our home page) and then we get all child pages of our home page which are live and marked as 'show in menu'.
+
+```
+from django import template
+from wagtail.core.models import Site
+
+register = template.Library()
+
+@register.inclusion_tag("tags/pages_menu.html")
+def get_pages_menu():
+  site = Site.objects.get(is_default_site=True)
+  home_page = site.root_page
+  pages = home_page.get_children().live().in_menu()
+  return {
+      "home_page":home_page,
+      "pages":pages,
+  }
+```
+
+63.  **Create a 'tag' directory**
+
+Within the 'home' app, open up 'templates' and create a directory called 'tags'.
+
+```
+projectfolder/
+  mysite/
+    home/
+      static/
+      templates/
+        home/
+        tags/
+      templatetags
+```
+
+64. **Create a 'pages_menu.html' file inside the 'tags' directory**
+
+Inside 'home/templates/tags', create this 'pages_menu.html' file which will be passed the 'home_page' and 'pages' variables from our template tag.
+
+```
+{% load wagtailcore_tags static %}
+
+<header>
+  <div class="container">
+    <nav class="navbar navbar-expand-md">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav0" aria-controls="navbarNav0" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav0">
+        <ul class="navbar-nav mr-auto ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% pageurl home_page %}">Home <span class="sr-only">(current)</span></a>
+          </li>
+          {% for page in pages %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% pageurl page %}">{{ page.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
+```
+
+65. **In 'base.html', load the template tag, and call the function**
+
+Open up our 'base.html' file located in 'projectfolder/mysite/mysite/templates'.
+
+Load the tag at the top and then call the function (get_pages_menu) located in 'pages_menu.py' like this:
+
+```
+{% load pages_menu %}
+
+...
+<body class="{% block body_class %}{% endblock %}">
+        {% wagtailuserbar %}
+
+        {% get_pages_menu %}
+
+        {% block content %}{% endblock %}
+```
 
 
 
