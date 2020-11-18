@@ -14,3 +14,8 @@ class HomePage(Page):
          related_name="+", 
          help_text='This image will appear in a full width image behind your intro text.'
     )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full"),
+        FieldPanel('main_image', classname="full")
+    ]
