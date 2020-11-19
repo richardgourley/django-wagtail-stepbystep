@@ -4,6 +4,8 @@ from wagtail.core.models import Page
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
+from surgeries.models import MedicalSpecialization, Doctor
+
 
 class HomePage(Page):
     intro = models.CharField(blank=False, null=True, max_length=255)
@@ -20,3 +22,12 @@ class HomePage(Page):
         FieldPanel('intro', classname="full"),
         ImageChooserPanel('main_image')
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        
+        medical_specializations = MedicalSpecialization.objects.all()
+        doctors = Doctor.objects.all()
+        context['medical_specializations'] = medical_specializations
+        context['doctors'] = doctors
+        return context
