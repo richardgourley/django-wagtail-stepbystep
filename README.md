@@ -18,7 +18,7 @@ A step by step reference guide with all of the steps and command line prompts re
 - Creating a menu of existing pages marked 'show in menu'
 
 - Setting up image fields for a home page hero image.
-- Using wagtail images and the django 'as' template tag to display image fields in different scenarios.
+- Using wagtail images and the django 'as' template tag to display image fields as a background.
 - Looping context variables in the home page.
 
 ## STEP BY STEP GUIDE
