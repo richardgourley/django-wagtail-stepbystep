@@ -51,7 +51,7 @@ class Surgery(models.Model):
 class Doctor(models.Model):
     first_name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
-    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
+    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations. Hold CTRL to click on more than 1.')
     bio = RichTextField(help_text='Add a very short bio.')
     surgery = models.ForeignKey(Surgery, on_delete=models.SET_NULL, null=True)
 
