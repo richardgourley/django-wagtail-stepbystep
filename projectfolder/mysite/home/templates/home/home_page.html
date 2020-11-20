@@ -12,9 +12,9 @@
 {% block content %}
 
 <!-- Set the main image (original size) for this page as an accessible 'tmp_main_image' -->
-{% image page.main_image original as tmp_main_image %}
+{% image page.main_image original as tmp_image %}
 
-<div class="container-fluid bg-r py-5" style="background-image: url({{ tmp_main_image.url }});">
+<div class="container-fluid bg-r py-5" style="background-image: url({{ tmp_image.url }});">
   <div class="container">
 	<div class="row justify-content-start">
 	<div class="col-12 col-sm-10 col-md-8 text-center text-sm-left">
@@ -31,12 +31,24 @@
 
 <div class="container py-5 text-center">
   <h1>Our Specializations</h1>
-  
+    <div class="row">
+      {% for medical_specialization in medical_specializations %}
+        <div class="col-sm-10 col-md-6 col-lg-4 py-3">
+          <h4>{{ medical_specialization.name }}</h4>
+        </div>
+      {% endfor %}
+    </div>
 </div>
 
 <div class="container py-5 text-center">
   <h1>Our Doctors</h1>
+    <div class="row">
+      {% for doctor in doctors %}
+        <div class="col-sm-10 col-md-6 col-lg-4 py-3">
+          <h4>{{ doctor }}</h4>
+        </div>
+      {% endfor %}
+    </div>
 </div>
-
 
 {% endblock content %}
