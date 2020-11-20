@@ -20,6 +20,7 @@ class SurgeryIndexPage(Page):
 # Create your models here.
 class MedicalSpecialization(models.Model):
     name = models.CharField(max_length=255)
+    description = RichTextField(help_text='Add a short description about the specialization. (It will be displayed on the home page.) ')
 
     def __str__(self):
         return self.name
@@ -51,6 +52,7 @@ class Doctor(models.Model):
     first_name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
     specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
+    bio = RichTextField(help_text='Add a very short bio.')
     surgery = models.ForeignKey(Surgery, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
