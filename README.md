@@ -9,13 +9,17 @@ A step by step reference guide with all of the steps and command line prompts re
 
 - Working with Django models
 - Adding django models to the admin page
-- Adding a root menu for a group of django models - eg. a folder named 'Properties' with models inside such as 'Commercial, Residential' etc.
+- Adding a root admin menu for a group of django models - eg. a folder named 'Properties' with models inside such as 'Commercial, Residential' etc.
 
 - Setting up a MySQL database (can be left as SQLlite or adapted to Postgres as required) using InnoDB tables instead of ISAM tables.
 - Setting up Bootstrap scss variables using django compress and django sass
 - Setting up Vue.js if you only require it on some pages, rather than creating a full SPA.
 
 - Creating a menu of existing pages marked 'show in menu'
+
+- Setting up image fields for a home page hero image.
+- Using wagtail images and the django 'as' template tag to display image fields in different scenarios.
+- Looping context variables in the home page.
 
 ## STEP BY STEP GUIDE
 
@@ -592,14 +596,18 @@ In this simple example we can add ForeignKeys and ManyToManyFields to link all o
 NOTE: Verbose plural names added to 'city' and 'surgery' models to correctly display the plural name of each in the admin.
 
 
-NOTE: Extra methods (doctors_list in 'Surgery' and specializations_list in 'Doctor') to display the ManyToMany and ForeignKey fields in the admin dashboard list_display.
+NOTE: Extra methods (doctors_list in 'Surgery' and specializations_list in 'Doctor') created to display the ManyToMany and ForeignKey fields in the admin dashboard list_display.
+
+NOTE: We have added a Wagtail field called RichTextField. It is similar to the Wordpress text editor.
 
 ```
 from django.db import models
+from wagtail.core.fields import RichTextField
 
 # Create your models here.
 class MedicalSpecialization(models.Model):
     name = models.CharField(max_length=255)
+    description = RichTextField(help_text='Add a short description about the specialization. (It will be displayed on the home page.) ')
 
     def __str__(self):
         return self.name
@@ -630,7 +638,8 @@ class Surgery(models.Model):
 class Doctor(models.Model):
     first_name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
-    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations.')
+    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations. Hold CTRL to click on more than 1.')
+    bio = RichTextField(help_text='Add a very short bio.')
     surgery = models.ForeignKey(Surgery, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
@@ -747,19 +756,18 @@ INTEGRATING DJANGO MODELS INTO THE WAGTAIL 'PAGE' ECOSYSTEM
 
 You can use URLs and Views as you would normally with Django, but if you are using Wagtail, you can create 'Wagtail Pages'.
 
-Wagtail pages are hierarchical.  You can create a template, and then create a page instance of that template as a child page of any other page. 
+Wagtail pages are hierarchical.  You can create a template and as a page instance as a child page of any other page eg.Home. 
 
-Here, we are going to create a surgery index page, with all surgeries returned in the pages context variable.
+Here, we are going to create a surgery index page and a template, with all surgeries returned in the pages context variable.
 
 Then, we will create a page instance of our surgery index page as a child page of 'Home'.
 
-55. **Add necessary Page, RichTextField and FieldPanel wagtail imports**
+55. **Add necessary Page and FieldPanel wagtail imports**
 
 In 'projectfolder/mysite/surgeries/models.py', add these imports at the top.
 
 ```
 from wagtail.core.models import Page
-from wagtail.core.fields import RichTextField
 from wagtail.admin.edit_handlers import FieldPanel
 ```
 
@@ -966,6 +974,171 @@ Load the tag at the top and then call the function (get_pages_menu) located in '
 
         {% block content %}{% endblock %}
 ```
+
+=================================================
+
+CREATING A HOME PAGE - 
+CREATING TEXT AND IMAGE FIELDS AND PASSING MODEL INSTANCES
+
+Under our menu, on the home page, we will create a demo hero image with intro text, and then display our 'specializations' and 'doctors' instances.
+
+66. **Create 'intro' and 'main_image' fields**
+
+In the 'home' app, open 'models.py'.  We are first importing 'ImageChooserPanel' and then creating a simple 'intro' field, and a 'main_image' field which will be displayed as a hero image:
+
+NOTE! In wagtail, images are saved as a foreign key and then related to this page.
+
+```
+from django.db import models
+
+from wagtail.core.models import Page
+from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
+
+
+class HomePage(Page):
+    intro = models.CharField(blank=False, null=True, max_length=255)
+    main_image = models.ForeignKey(
+      'wagtailimages.Image',
+       null=True,
+         on_delete=models.SET_NULL, 
+         related_name="+", 
+         help_text='This image will appear in a full width image behind your intro text.'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full"),
+        ImageChooserPanel('main_image')
+    ]
+```
+
+67. **Import models from surgeries and add to context variable**
+
+Here, we are importing 'Doctor' and 'MedicalSpecialization' from our 'surgeries' app.  Then, we query those models and pass them to the context variable of our home page for displaying in the template.
+
+```
+...
+from surgeries.models import MedicalSpecialization, Doctor
+...
+
+class HomePage(Page):
+    intro = models.CharField(blank=False, null=True, max_length=255)
+    main_image = models.ForeignKey(
+      'wagtailimages.Image',
+       null=True, 
+       blank=True, 
+         on_delete=models.SET_NULL, 
+         related_name="+", 
+         help_text='This image will appear in a full width image behind your intro text.'
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full"),
+        ImageChooserPanel('main_image')
+    ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        
+        medical_specializations = MedicalSpecialization.objects.all()
+        doctors = Doctor.objects.all()
+        context['medical_specializations'] = medical_specializations
+        context['doctors'] = doctors
+        return context
+```
+
+68. **Update the database with our new 'home/models.py' changes**
+
+```
+python manage.py makemigrations
+```
+
+```
+python manage.py migrate
+```
+
+69. **Add 'wagtailimages_tags'**
+
+In order to access our home page 'main_image', load 'wagtailimages_tags' by adding this below the 'load static' line in 'home/templates/home/home_page.html':
+
+```
+{% extends "base.html" %}
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+```
+
+70. **Give the image an alias using 'as'**
+
+Wagtail has a really useful way of displaying image fields.  
+
+Normally, we can display a wagtail image field with the dimensions we require, like this: 
+
+```
+{% image page.main_image fill-320x240 %}
+```
+
+In this case, we are going to use our wagtail image as a background, so we have to use the Django 'as' alias. So just below {% block content %} add:
+
+```
+<!-- Set the main image (original size) for this page as an accessible 'tmp_image' -->
+{% image page.main_image original as tmp_image %}
+```
+
+71. **Create a hero image and loop our context variable objects**
+
+Now using bootstrap, in 'home/templates/home/home_page.html' add a hero image, and then divs for looping and displaying our doctors and medical specializations.
+
+NOTE: Rich text fields are displayed differently:
+
+```
+<div class="container-fluid bg-r py-5" style="background-image: url({{ tmp_image.url }});">
+  <div class="container">
+  <div class="row justify-content-start">
+  <div class="col-12 col-sm-10 col-md-8 text-center text-sm-left">
+    <h1 class="text-white">{{ page.intro }}</h1>
+    <p class="lead text-white">Get your appointment booked with us today!</p>
+    <p class="mt-4">
+      <a class="btn btn-secondary mr-3 mr-sm-0" href="">Find a surgery</a>
+      <a class="btn btn-primary ml-sm-3 mr-3 mr-sm-0 mt-3 mt-sm-0" href="">Meet our doctors</a>
+    </p>
+  </div>
+  </div>
+  </div>
+</div>
+
+<div class="container py-5 text-center">
+  <h1>Our Specializations</h1>
+    <div class="row">
+      {% for medical_specialization in medical_specializations %}
+        <div class="col-sm-10 col-md-6 col-lg-4 py-3">
+          <h4>{{ medical_specialization.name }}</h4>
+          {{ medical_specialization.description|richtext }}
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+<div class="container py-5 text-center">
+  <h1>Our Doctors</h1>
+    <div class="row">
+      {% for doctor in doctors %}
+        <div class="col-sm-10 col-md-6 col-lg-4 py-3">
+          <h4>{{ doctor }}</h4>
+          {{ doctor.bio|richtext }}
+        </div>
+      {% endfor %}
+    </div>
+</div>
+```
+
+72. ****
+
+
+
+
+
+
 
 
 
