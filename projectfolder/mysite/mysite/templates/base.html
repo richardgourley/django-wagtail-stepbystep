@@ -1,5 +1,8 @@
 {% load static wagtailuserbar %}
 
+<!-- Template tag created in home/templatetags/pages_menu.py -->
+{% load pages_menu %}
+
 {% load compress %}
 
 <!DOCTYPE html>
@@ -19,20 +22,23 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        {# Global stylesheets #}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
-
         {% compress css %}
         <link type="text/x-scss" href="{% static 'theme.scss' %}" rel="stylesheet" media="screen">
         {% endcompress %}
 
+        {# Global stylesheets #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/mysite.css' %}">
+
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}
         {% endblock %}
+
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
+
+        {% get_pages_menu %}
 
         {% block content %}{% endblock %}
 
