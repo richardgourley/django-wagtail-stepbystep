@@ -1132,7 +1132,6 @@ NOTE: Rich text fields are displayed differently:
 </div>
 ```
 
-72. ****
 
 
 
