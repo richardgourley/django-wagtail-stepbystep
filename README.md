@@ -1132,6 +1132,170 @@ NOTE: Rich text fields are displayed differently:
 </div>
 ```
 
+=================================================
+
+DJANGO VIEWS - HOW TO USE THEM ALONGSIDE WAGTAIL
+
+Django models and views (such as generic detail view, list view etc.) work exactly the same alongside Wagtail, so a url such as 'surgeries/doctors/james-blakely' can be created directly from your 'Doctor' instances, without needing to create a wagtail page.
+
+This is important if you are adding Wagtail to an existing Django site, or you wish to use Wagtail for some parts of your site, but prefer to use the traditional Django models, urls, views and templates for other parts.
+
+To test this, here we are going to create a 'view' for each of our doctors displaying information from the 'Doctor' model fields.
+
+71. **Add a 'slug' field to the Doctor model**
+
+Inside 'surgeries/models.py', we need to add a slug field.  This field will be used to display in urls.  (We could use the 'id' but it's better for site security and readability to use slugs in urls).
+
+```
+class Doctor(models.Model):
+    first_name = models.CharField(max_length=255)
+    surname = models.CharField(max_length=255)
+    specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations. Hold CTRL to click on more than 1.')
+    bio = RichTextField(help_text='Add a very short bio.')
+    surgery = models.ForeignKey(Surgery, on_delete=models.SET_NULL, null=True)
+    slug = models.SlugField(max_length=150, unique=True, help_text='This field will appear in the url eg doctors/dave-simpson')
+
+    def __str__(self):
+        return self.first_name + ' ' + self.surname
+
+    def specializations_list(self):
+        return ', '.join(specialization.name for specialization in self.specializations.all())
+```
+
+NOTE!  If you have already created instances of the 'Doctor' model, you will need to set the slug field to null=True, then create slugs for each doctor, then remove null=True after each instance has a slug field set.
+
+72. **Create a 'DoctorDetailView' class in the views file.**
+
+In the 'surgeries/views.py' file, here we create a class that inherits from 'generic.DetailView'.  This easily allows us to display each doctor individually.
+
+```
+from django.shortcuts import render
+from django.views import generic
+from .models import Doctor
+
+# Create your views here.
+class DoctorDetailView(generic.DetailView):
+  model = Doctor
+  template_name = 'surgeries/doctor_detail.html'
+
+  def get_queryset(self):
+    return Doctor.objects.all()
+```
+
+73. **Create a 'urls.py' folder inside 'surgeries'**
+
+Directly inside our surgeries app directory, create a file called 'urls.py'.  Here we are going to add this url pattern linked to our 'DoctorDetailView':
+
+```
+from django.urls import path
+from . import views
+
+app_name = 'surgeries'
+
+urlpatterns = [
+    path('doctor/<slug:slug>', views.DoctorDetailView.as_view(), name="doctor_detail"),
+]
+```
+
+74. **Now create a template to use for each Doctor instance.***
+
+In 'surgeries/templates/surgeries' create a new file called 'doctor_detail.html':
+
+```
+{% extends "base.html" %}
+{% load static %}
+
+<!-- Loads wagtail template tags -->
+{% load wagtailcore_tags %}
+
+{% block body_class %}surgery-index-page{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+
+{% if doctor %}
+<div class="container py-4">
+  <h2>{{ doctor }}</h2>
+  <p class="lead">{{ doctor.bio|richtext }}</p>
+  <hr>
+  <h3>Specialization:</h3>
+  <ul>
+  {% for specialization in doctor.specializations.all %}
+     <li>{{ specialization.name }}</li>
+  {% endfor %}
+  </ul>
+  <h3>Surgery:</h3>
+  <h4>{{ doctor.surgery }}</h4>
+  <p>{{ doctor.surgery.address }}</p>
+</div>
+
+{% endif %}
+
+{% endblock content %}
+```
+
+75. **Register our 'surgeries/urls.py' globally in the 'mysite/urls.py' file**
+
+In order for Django to recognize the url patterns you have created in an app, we need to add them to the global url file. Open 'projectfolder/mysite/mysite/urls.py' and add in our surgeries urls like this:
+
+```
+# Make sure 'include is imported'...
+from django.urls import include, path
+...
+
+urlpatterns = [
+    path('django-admin/', admin.site.urls),
+
+    path('admin/', include(wagtailadmin_urls)),
+    path('documents/', include(wagtaildocs_urls)),
+
+    path('search/', search_views.search, name='search'),
+
+    path('surgeries/', include('surgeries.urls')),
+
+]
+```
+
+76. **Add a link for each doctor on our home page**
+
+We already loop through each doctor and display basic info on the home page. We can now also add a url link for each doctor taking the visitor to a page such as 'mysite/surgeries/doctors/james-blakely'.
+
+In 'home/templates/home/home_page.html' add a link to our doctors loop like this:
+
+```
+<div class="container py-5 text-center">
+  <h1>Our Doctors</h1>
+    <div class="row">
+      {% for doctor in doctors %}
+        <div class="col-sm-10 col-md-6 col-lg-4 py-3">
+          <h4>{{ doctor }}</h4>
+          <a href="{% url 'surgeries:doctor_detail' doctor.slug %}" >
+            Learn more >>
+          </a>
+          {{ doctor.bio|richtext }}
+        </div>
+      {% endfor %}
+    </div>
+</div>
+```
+
+If you create 2 or 3 doctors with a slug field added, you should be able to see all of your doctors listed on the home page with a link for each doctor that takes you to 'site/surgeries/doctors/slug'.
+
+NOTE: This is just an example.
+
+We could take our doctor model further and it might make more sense to have a short_bio field for the home page and a long_bio field for the individual doctors page.
+
+We would probably add an image field to display an image of the doctor.
+
+For our 'Surgery' model, we could add more fields such as a transport directions field, and an image gallery (this can be created fairly easily - see the wagtail first site documentation).
+
+You could also make use of Wagtail by adding a blog and some other pages such as an 'About' page, 'contact' page.  This could then be combined with the power of Django's user system, where a patient, doctor log in system could be created.
+
+Hope this helps in getting Wagtail up and running and shows how it works very nicely alongside Django!
+
+
 
 
 
