@@ -54,6 +54,7 @@ class Doctor(models.Model):
     specializations = models.ManyToManyField(MedicalSpecialization, help_text='Select 1 or more specializations. Hold CTRL to click on more than 1.')
     bio = RichTextField(help_text='Add a very short bio.')
     surgery = models.ForeignKey(Surgery, on_delete=models.SET_NULL, null=True)
+    slug = models.SlugField(max_length=150, unique=True, help_text='This field will appear in the url eg doctors/dave-simpson')
 
     def __str__(self):
         return self.first_name + ' ' + self.surname
