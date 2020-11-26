@@ -14,21 +14,24 @@
 <!-- Set the main image (original size) for this page as an accessible 'tmp_image' -->
 {% image page.main_image original as tmp_image %}
 
-<div class="container-fluid bg-r py-5" style="background-image: url({{ tmp_image.url }});">
+<!--- Hero Image --->
+<div class="hero container-fluid bg-r" style="background-image: url({{ tmp_image.url }});">
   <div class="container">
-	<div class="row justify-content-start">
-	<div class="col-12 col-sm-10 col-md-8 text-center text-sm-left">
-	  <h1 class="text-white">{{ page.intro }}</h1>
-	  <p class="lead text-white">Get your appointment booked with us today!</p>
-	  <p class="mt-4">
-	    <a class="btn btn-secondary mr-3 mr-sm-0" href="">Find a surgery</a>
-	    <a class="btn btn-primary ml-sm-3 mr-3 mr-sm-0 mt-3 mt-sm-0" href="">Meet our doctors</a>
-	  </p>
-	</div>
-	</div>
+  	<div class="row justify-content-start">
+    	<div class="col-12 col-sm-10 col-md-8 text-center text-sm-left">
+    	  <h1 class="text-white">{{ page.intro }}</h1>
+    	  <p class="lead text-white">Get your appointment booked with us today!</p>
+    	  <p class="mt-4">
+    	    <a class="btn btn-secondary mr-3 mr-sm-0" href="">Find a surgery</a>
+    	    <a class="btn btn-primary mr-3 mr-sm-0" href="">Meet our doctors</a>
+    	  </p>
+    	</div>
+  	</div>
   </div>
 </div>
 
+
+<!--- Specializations --->
 <div class="section">
   <div class="container text-center">
     <h1>Our Specializations</h1>
@@ -43,6 +46,7 @@
   </div>
 </div>
 
+<!--- Doctors --->
 <div class="section">
   <div class="container text-center">
     <h1>Our Doctors</h1>
@@ -50,8 +54,8 @@
         {% for doctor in doctors %}
           <div class="col-sm-10 col-md-6 col-lg-4 py-3">
             <h4>{{ doctor }}</h4>
-            <a href="{% url 'surgeries:doctor_detail' doctor.slug %}" >
-              Learn more >>
+            <a href="{% url 'surgeries:doctor_detail' doctor.slug %}">
+              <p class="text-primary"><strong>Learn more >></strong></p>
             </a>
             {{ doctor.bio|richtext }}
           </div>
