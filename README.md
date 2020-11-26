@@ -302,11 +302,14 @@ COMPRESS_PRECOMPILERS = (
 
 26. **Open up the scss and js folders in your bootstrap download**
 
-NOTE! For demonstration purposes, I haven't included all files from the 'scss' folder.  I have ommited the 'utilities', 'mixins' and 'vendor' directories - you would need these in a full project using bootstrap!
+NOTE! For demonstration purposes, I haven't included all files from the 'scss' directory.  
+
+I have ommited the 'utilities', 'mixins' and 'vendor' directories from the 'scss' directory.
+You may require these in your project.
 
 27. **Create folders inside 'mysite/static' to add bootstrap files**
 
-Create directories inside the 'css' and 'js' directories of 'projectname/mysite/mysite/static' as follows:
+Create directories inside the 'css' directory of 'projectname/mysite/mysite/static' as follows:
 
 ```
 projectfolder/
@@ -316,14 +319,12 @@ projectfolder/
         css/
           bootstrap/
             scss/
-        mysite.css
+          mysite.css
         js/
-          bootstrap/
-            js/
-        mysite.js
+          mysite.js
 ```
 
-28. **Inside the 'css/bootstrap/scss' directory and the 'js/bootstrap/js' directory copy over the scss files and js files from your bootstrap download.**
+28. **Inside the 'css/bootstrap/scss' directory copy over the scss files from your bootstrap download.**
 
 29. **Create a 'theme.scss' file where we can import and override bootstrap.scss variables easily.**
 
@@ -337,15 +338,15 @@ projectfolder/
         css/
           bootstrap/
             scss/
-        mysite.css
+          mysite.css
         js/
           bootstrap/
             js/
-        mysite.js
-      theme.scss
+          mysite.js
+        theme.scss
 ```
 
-30. **Open up the 'theme.scss' created above and modify a few bootstrap variables to test , and import the bootstrap.scss variables**
+30. **Open up the 'theme.scss' created above and modify a few bootstrap variables to test and import the bootstrap.scss variables**
 
 ```
 $primary: purple;
@@ -393,14 +394,16 @@ Then after our {# Global stylesheets #} add our compressed scss file:
 {% endcompress %}
 ```
 
-33. **Load any Bootstrap JS files as you require them as shown below. Remove ones you don't need.**
+33. **Load Bootstrap JS files**
+
+You could use the downloaded Bootstrap Javascript files (as we did with the SCSS files) but you can also use a CDN as shown below if you don't need to modify them.
 
 In 'base.html', under {# Global javascript #}
 
 ```
 {# Bootstrap javascript #}
-<script type="text/javascript" src="{% static 'js/bootstrap/js/src/dropdown.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap/js/src/carousel.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 ```
 
 =================================================
@@ -429,7 +432,7 @@ HOME / HOME PAGE
 
 35. **Remove links to welcome page from home page**
 
-In 'projectfolder/mysite/home/templates/home/home_page.html' you can delete the welcome page css link and 'include' welcome page, and all comments..
+In 'projectfolder/mysite/home/templates/home/home_page.html' you can delete the default welcome page css link and 'include' welcome page, and all comments..
 
 ```
 ...
@@ -809,27 +812,36 @@ NOTE!: The naming convention is crucial when working with Wagtail. The template 
 57. **Loop through all surgeries in the surgery index page.**
 
 ```
-{% block content %}
-
-<div class="container">
 {% if surgeries %}
-  {% for surgery in surgeries %}
-    <h2>{{ surgery.surgery_name }}</h2>
-    <h4>ADDRESS:</h4>
-    <p>{{ surgery.address}}</p>
-    <p>{{ surgery.city }}</p>
-    <h4>DOCTORS:</h4>
-    <ul>
-      {% for doctor in surgery.doctor_set.all %}
-        <li><strong>{{ doctor.first_name }} {{ doctor.surname}}</strong></li>
-        {% for specialization in doctor.specializations.all %}
-          <p>{{ specialization.name }}</p>
-        {% endfor %}
-      {% endfor %}
-    </ul>
-  {% endfor %}
-{% endif %}
+<div class="container my-4">
+  <div class="row">
+    {% for surgery in surgeries %}
+    <div class="col-sm-6 p-3">
+      <div class="card h-100 shadow p-3">
+        <div class="card-body">
+          <h2 class="text-primary card-title">{{ surgery.surgery_name }}</h2>
+          <h3 class="text-secondary lead">ADDRESS:</h3>
+          <br>
+          <p class="card-text">{{ surgery.address }}</p>
+          <p class="card-text">{{ surgery.city }}</p>
+          <div class="card-body">
+            <h3 class="text-secondary lead">DOCTORS:</h3>
+            <ul>
+            {% for doctor in surgery.doctor_set.all %}
+              <li><strong>{{ doctor.first_name }} {{ doctor.surname}}</strong></li>
+              {% for specialization in doctor.specializations.all %}
+                <p>{{ specialization.name }}</p>
+              {% endfor %}
+            {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
+{% endif %}
 
 {% endblock content %}
 ```
@@ -848,11 +860,9 @@ e) Give your page a name and write an intro.
 
 In this case, your new template will appear as the page title you gave the page, eg. url/surgeries
 
-Wagtail is hierarchical so you could create a subfolder of 'Home' called doctors and then create and add a doctors search page type giving this url:
+Wagtail is hierarchical so you could create a subpage of 'Home' called doctors and then create a subpage of doctors called 'search doctors' which would give you this url:
 
 `eg. url/doctors/search-doctors`
-
-You could also retrieve 'counts' from the database and add that to any page template you create eg. 6 doctors, 7 medical specializations etc. and display this data on your homepage for example.
 
 =================================================
 
@@ -890,7 +900,7 @@ We need to do this so Django will know it is a module and will read the python f
 
 In the 'templatetags' directory create a file called 'pages_menu.py'.
 
-We register the template tag, then with an inclusion tag, instruct django to pass the returned results from the function to 'tags/pages_menu.html'.
+We register the template tag, then with an inclusion tag, instruct django to pass the returned results from the function to 'home/templates/tags/pages_menu.html'.
 
 In the function, we first get the site root page (our home page) and then we get all child pages of our home page which are live and marked as 'show in menu'.
 
@@ -928,26 +938,26 @@ projectfolder/
 
 64. **Create a 'pages_menu.html' file inside the 'tags' directory**
 
-Inside 'home/templates/tags', create this 'pages_menu.html' file which will be passed the 'home_page' and 'pages' variables from our template tag.
+Inside 'home/templates/tags', create this 'pages_menu.html' file which will be passed the 'home_page' and 'pages' variables from our template tag.  You can see how you can loop the pages in our pages menu:
 
 ```
 {% load wagtailcore_tags static %}
 
 <header>
   <div class="container">
-    <nav class="navbar navbar-expand-md">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav0" aria-controls="navbarNav0" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar-expand-md navbar-light">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarNav0">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="{% pageurl home_page %}">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link text-primary" href="{% pageurl home_page %}">Home <span class="sr-only">(current)</span></a>
           </li>
           {% for page in pages %}
           <li class="nav-item">
-            <a class="nav-link" href="{% pageurl page %}">{{ page.title }}</a>
+            <a class="nav-link text-primary" href="{% pageurl page %}">{{ page.title }}</a>
           </li>
           {% endfor %}
         </ul>
@@ -964,12 +974,14 @@ Open up our 'base.html' file located in 'projectfolder/mysite/mysite/templates'.
 Load the tag at the top and then call the function (get_pages_menu) located in 'pages_menu.py' like this:
 
 ```
+<--- Load the pages_menu tag --->
 {% load pages_menu %}
 
 ...
 <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
 
+        <!-- Display pages menu before content --->
         {% get_pages_menu %}
 
         {% block content %}{% endblock %}
@@ -1085,50 +1097,100 @@ In this case, we are going to use our wagtail image as a background, so we have 
 {% image page.main_image original as tmp_image %}
 ```
 
-71. **Create a hero image and loop our context variable objects**
+71. **Add a css file, create a hero image and loop our context variable objects**
 
-Now using bootstrap, in 'home/templates/home/home_page.html' add a hero image, and then divs for looping and displaying our doctors and medical specializations.
+Create a css file to add some styling to our home page.
+
+Inside your 'home' app add a 'home.css' file inside a static folder like this:
+
+```
+home/
+  static/
+    home/
+      css/ 
+        home.css
+```
+
+Add to 'home.css' these styling classes for the hero and section areas:
+
+```
+.section{
+  padding-top: 50px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.hero {
+  padding: 90px;
+}
+
+@media (max-width: 800px) {
+  .hero {
+    padding: 60px;
+  }
+}
+
+@media (max-width: 460px) {
+  .hero {
+    padding: 25px;
+  }
+}
+```
+
+Now in 'home/templates/home/home_page.html' add a hero image, and then divs for looping and displaying our doctors and medical specializations.
 
 NOTE: Rich text fields are displayed differently:
 
 ```
-<div class="container-fluid bg-r py-5" style="background-image: url({{ tmp_image.url }});">
+<!--- Hero Image --->
+<div class="hero container-fluid bg-r" 
+style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url({{ tmp_image.url }}); background-size: cover; background-position: center;">
   <div class="container">
-  <div class="row justify-content-start">
-  <div class="col-12 col-sm-10 col-md-8 text-center text-sm-left">
-    <h1 class="text-white">{{ page.intro }}</h1>
-    <p class="lead text-white">Get your appointment booked with us today!</p>
-    <p class="mt-4">
-      <a class="btn btn-secondary mr-3 mr-sm-0" href="">Find a surgery</a>
-      <a class="btn btn-primary ml-sm-3 mr-3 mr-sm-0 mt-3 mt-sm-0" href="">Meet our doctors</a>
-    </p>
-  </div>
-  </div>
+    <div class="row justify-content-start">
+      <div class="col-12 col-sm-10 col-md-8 text-center text-sm-left">
+        <h1 class="text-white">{{ page.intro }}</h1>
+        <p class="lead text-white">Get your appointment booked with us today!</p>
+        <p class="mt-4">
+          <a class="border border-white btn btn-secondary mr-4 mt-2" href="">Find a surgery</a>
+          <a class="border border-white btn btn-primary mr-4 mt-2" href="">Meet our doctors</a>
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="container py-5 text-center">
-  <h1>Our Specializations</h1>
-    <div class="row">
-      {% for medical_specialization in medical_specializations %}
-        <div class="col-sm-10 col-md-6 col-lg-4 py-3">
-          <h4>{{ medical_specialization.name }}</h4>
-          {{ medical_specialization.description|richtext }}
-        </div>
-      {% endfor %}
-    </div>
+
+<!--- Specializations --->
+<div class="section">
+  <div class="container text-center">
+    <h1>Our Specializations</h1>
+      <div class="row">
+        {% for medical_specialization in medical_specializations %}
+          <div class="col-sm-10 col-md-6 col-lg-4 py-3">
+            <h4>{{ medical_specialization.name }}</h4>
+            {{ medical_specialization.description|richtext }}
+          </div>
+        {% endfor %}
+      </div>
+  </div>
 </div>
 
-<div class="container py-5 text-center">
-  <h1>Our Doctors</h1>
-    <div class="row">
-      {% for doctor in doctors %}
-        <div class="col-sm-10 col-md-6 col-lg-4 py-3">
-          <h4>{{ doctor }}</h4>
-          {{ doctor.bio|richtext }}
-        </div>
-      {% endfor %}
-    </div>
+<!--- Doctors --->
+<div class="section">
+  <div class="container text-center">
+    <h1>Our Doctors</h1>
+      <div class="row">
+        {% for doctor in doctors %}
+          <div class="col-sm-10 col-md-6 col-lg-4 py-3">
+            <h4>{{ doctor }}</h4>
+            <a href="{% url 'surgeries:doctor_detail' doctor.slug %}">
+              <p class="text-primary"><strong>Learn more >></strong></p>
+            </a>
+            {{ doctor.bio|richtext }}
+          </div>
+        {% endfor %}
+      </div>
+  </div>
 </div>
 ```
 
