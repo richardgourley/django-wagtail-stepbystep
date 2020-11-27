@@ -1205,7 +1205,7 @@ style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3))
 
 =================================================
 
-DJANGO VIEWS - HOW TO USE THEM ALONGSIDE WAGTAIL
+**DJANGO VIEWS - HOW TO USE THEM ALONGSIDE WAGTAIL**
 
 Django models and views (such as generic detail view, list view etc.) work exactly the same alongside Wagtail, so a url such as 'surgeries/doctors/james-blakely' can be created directly from your 'Doctor' instances, without needing to create a wagtail page.
 
