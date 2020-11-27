@@ -258,7 +258,7 @@ You should see a message giving you the URL of your site to visit.
 
 =================================================
 
-SETTING UP BOOTSTRAP .SCSS FILES
+**SETTING UP BOOTSTRAP .SCSS FILES**
 
 You need to install 2 dependencies to get bootstrap up and running with .scss variables that make changing basic bootstrap settings much easier and more managable.
 
@@ -357,7 +357,7 @@ $secondary: orange;
 
 =================================================
 
-BASE.HTML
+**BASE.HTML**
 
 In django and wagtail projects, the base.html file is the html page that calls content from other templates inside {% block content%} and is used as the base of every page.
 
@@ -408,6 +408,8 @@ In 'base.html', under {# Global javascript #}
 
 =================================================
 
+**VUE JS**
+
 34. **Vue.JS - If you only want to use Vue on some pages you can use the {% block extra js%} tags**
 
 In 'base.html' you will see this:
@@ -428,7 +430,7 @@ You can add the code below to any template files you create where you want to ad
 
 =================================================
 
-HOME / HOME PAGE
+**HOME / HOME PAGE**
 
 35. **Remove links to welcome page from home page**
 
@@ -466,7 +468,7 @@ In 'home/templates/home/home_page.html' add some html with bootstrap classes, wi
 
 ================================================
 
-CUSTOMIZE THE WAGTAIL ADMIN DASHBOARD
+**CUSTOMIZE THE WAGTAIL ADMIN DASHBOARD**
 
 Run the server if not running and log in to your wagtail dashboard - url/admin
 
@@ -553,8 +555,8 @@ This overrides the message you see when you go to log in at the admin page:
 
 =================================================
 
-DJANGO MODELS -
-MODEL ADMIN allows you to add django models to the admin page.
+**DJANGO MODELS -**
+**MODEL ADMIN** allows you to add django models to the admin page.
 
 You can use django fields AND wagtail fields on your models, so you can enhance the best parts of Django with more fields and you can then integrate your models into Wagtail pages.
 
@@ -755,7 +757,7 @@ NOTE!! - You can register single objects in the admin (not neccesarily in a grou
 
 =================================================
 
-INTEGRATING DJANGO MODELS INTO THE WAGTAIL 'PAGE' ECOSYSTEM
+**INTEGRATING DJANGO MODELS INTO THE WAGTAIL 'PAGE' ECOSYSTEM**
 
 You can use URLs and Views as you would normally with Django, but if you are using Wagtail, you can create 'Wagtail Pages'.
 
@@ -866,7 +868,7 @@ Wagtail is hierarchical so you could create a subpage of 'Home' called doctors a
 
 =================================================
 
-CREATING A MENU OF WAGTAIL PAGES DYNAMICALLY 
+**CREATING A MENU OF WAGTAIL PAGES DYNAMICALLY**
 
 You can create your own template tags in django and wagtail to retrieve pages and display them with a link in a navigation menu.
 
@@ -989,7 +991,7 @@ Load the tag at the top and then call the function (get_pages_menu) located in '
 
 =================================================
 
-CREATING A HOME PAGE - 
+**CREATING A HOME PAGE -**
 CREATING TEXT AND IMAGE FIELDS AND PASSING MODEL INSTANCES
 
 Under our menu, on the home page, we will create a demo hero image with intro text, and then display our 'specializations' and 'doctors' instances.
