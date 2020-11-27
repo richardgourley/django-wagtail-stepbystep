@@ -1122,6 +1122,8 @@ Add to 'home.css' these styling classes for the hero and section areas:
 
 .hero {
   padding: 90px;
+  background-size: cover;
+  background-position: center;
 }
 
 @media (max-width: 800px) {
@@ -1142,9 +1144,14 @@ Now in 'home/templates/home/home_page.html' add a hero image, and then divs for 
 NOTE: Rich text fields are displayed differently:
 
 ```
+{% block content %}
+
+<!-- Set the main image (original size) for this page as an accessible 'tmp_image' -->
+{% image page.main_image original as tmp_image %}
+
 <!--- Hero Image --->
 <div class="hero container-fluid bg-r" 
-style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url({{ tmp_image.url }}); background-size: cover; background-position: center;">
+style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url({{ tmp_image.url }});">
   <div class="container">
     <div class="row justify-content-start">
       <div class="col-12 col-sm-10 col-md-8 text-center text-sm-left">
@@ -1192,6 +1199,8 @@ style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3))
       </div>
   </div>
 </div>
+
+{% endblock content %}
 ```
 
 =================================================
