@@ -1,0 +1,7 @@
+.outer-nav {
+	box-shadow: 0px 0 11px 0 rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    font-weight: bold;
+}
