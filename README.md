@@ -946,27 +946,43 @@ Inside 'home/templates/tags', create this 'pages_menu.html' file which will be p
 {% load wagtailcore_tags static %}
 
 <header>
-  <div class="container">
-    <nav class="navbar navbar-expand-md navbar-light">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <div class="container-fluid outer-nav">
+    <div class="container">
+      <nav class="navbar navbar-expand-md navbar-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link text-primary" href="{% pageurl home_page %}">Home <span class="sr-only">(current)</span></a>
-          </li>
-          {% for page in pages %}
-          <li class="nav-item">
-            <a class="nav-link text-primary" href="{% pageurl page %}">{{ page.title }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </nav>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link text-primary" href="{% pageurl home_page %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            {% for page in pages %}
+            <li class="nav-item">
+              <a class="nav-link text-primary" href="{% pageurl page %}">{{ page.title }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </nav>
+    </div>
   </div>
 </header>
+```
+
+We have added an 'outer-nav' class above allowing us to add some css styling to our bootstrap navbar.
+
+In our main css file located at 'mysite/mysite/static/css/mysite.css' and add some styling for our 'pages_menu.html' file created above:
+
+```
+.outer-nav {
+  box-shadow: 0px 0 11px 0 rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    font-weight: bold;
+}
 ```
 
 65. **In 'base.html', load the template tag, and call the function**
