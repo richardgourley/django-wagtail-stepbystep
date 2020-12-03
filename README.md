@@ -174,7 +174,11 @@ CREATE DATABASE mysite CHARACTER SET UTF8;
 GRANT ALL ON mysite.* TO newusername@localhost;
 ```
 
-NOTE!!! You will also need to grant priveliges for the testing database which will be created if you run tests.
+NOTE!!! It's highly recommended to create and run tests on your projects.
+
+If you run tests later, you will also need to grant priveliges for the testing database. 
+
+Tests aren't covered in this step by step guide but the Django documentation and the Mozilla Django tutorial cover testing in detail.
 
 15. **Create a file called '.env' inside 'projectfolder/mysite/' and add your site settings**
 
@@ -191,7 +195,7 @@ DB_HOST=127.0.0.1
 PORT=3306
 ```
 
-The db host and port number might be different with different setups.
+NOTE!! The db host and port number might be different on your machine.
 
 16. **Import python decouple to read our '.env' file**
 
@@ -300,7 +304,7 @@ COMPRESS_PRECOMPILERS = (
 
 25. **Download bootstrap from getbootstrap.com**
 
-26. **Open up the scss and js folders in your bootstrap download**
+26. **Open up the scss directory in your Bootstrap download**
 
 NOTE! For demonstration purposes, I haven't included all files from the 'scss' directory.  
 
@@ -340,8 +344,6 @@ projectfolder/
             scss/
           mysite.css
         js/
-          bootstrap/
-            js/
           mysite.js
         theme.scss
 ```
@@ -396,7 +398,9 @@ Then after our {# Global stylesheets #} add our compressed scss file:
 
 33. **Load Bootstrap JS files**
 
-You could use the downloaded Bootstrap Javascript files (as we did with the SCSS files) but you can also use a CDN as shown below if you don't need to modify them.
+You could use the downloaded Bootstrap Javascript files (as we did with the SCSS files) but you can also use a CDN as shown below.
+
+In this guide, we are only using a little Bootstrap JS for the navbar and we don't need to modify any other JS files so we'll add the Bootstrap JS via a CDN:
 
 In 'base.html', under {# Global javascript #}
 
