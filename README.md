@@ -112,11 +112,11 @@ You will see that you have 2 mysite/ directories - later in this guide, I'll ref
 
 8. **Go into the outer mysite directory**
 
-(You should currently be in 'projectfolder'.  Navigate to 'projectfolder/mysite' - tou should be in the directory containing the file 'manage.py')
+You should currently be in 'projectfolder'.  Navigate to 'projectfolder/mysite' - in this directory you should see the 'manage.py' file and the 'home' and 'search' app directories.
 
 `cd mysite`
 
-9. **Wagtail automatically adds a requirements.txt file. To check any other requirements are installed enter the following command.**
+9. **Wagtail automatically adds a requirements.txt file. To ensure any other requirements are installed with this version of Wagtail, enter the following command.**
 
 `pip install -r requirements.txt`
 
