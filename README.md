@@ -137,7 +137,7 @@ This connects our wagtail project to a MySQL database.
 
 To check the above have installed and to see all other packages installed in our virtual environment, along with their version numbers, enter this:
 
-`pip freeze`
+`pip list`
 
 13. **Create a gitignore file**
 
