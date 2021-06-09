@@ -116,9 +116,7 @@ You should currently be in 'projectfolder'.  Navigate to 'projectfolder/mysite' 
 
 `cd mysite`
 
-9. **Wagtail automatically adds a requirements.txt file. To ensure any other requirements are installed with this version of Wagtail, enter the following command.**
-
-`pip install -r requirements.txt`
+9. **Wagtail automatically adds a requirements.txt file. Just locate this file and take a look at it. The use of a requirements.txt file is explained more in the'PIP LIST, PIP FREEZE AND REQUIREMENTS.TXT section.**
 
 10. **Install python decouple**
 
