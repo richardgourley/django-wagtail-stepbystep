@@ -392,7 +392,7 @@ touch requirements.txt
 Now we can use pip freeze to create a requirements file conataining all packages and version ready to install in production:
 
 ```
-pip freeze -r requirements.txt
+pip freeze > requirements.txt
 ```
 
 =================================================
