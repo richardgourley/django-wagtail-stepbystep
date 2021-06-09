@@ -357,6 +357,46 @@ $secondary: orange;
 
 =================================================
 
+**'PIP LIST', 'PIP FREEZE' AND 'REQUIREMENTS.TXT'**
+
+- A few notes about why you should use a 'requirements.txt' file.
+
+At this stage we have installed all of the packages we will require.
+
+You can enter 'pip list' which will display every package and its' version.
+
+```
+pip list
+```
+
+## Development vs. Production
+
+It's useful to create a 'requirements.txt.' file during development which contains all of the packages and versions you have because when you deploy your project (in production) you can simply run one command:
+
+```
+pip install requirements.txt
+```
+
+The above command will make sure that the versions of the packages you have installed up to now in your development virtual environment are exactly the same versions as when you deploy your project to the cloud - AWS, heroku, PythonAnywhere etc.
+
+That saves time AND saves you problems if you are using different versions of software which can cause your lovely development app to behave differently in production.
+
+## Pip Freeze and requirements.txt
+
+Wagtail already comes with a 'requirements.txt' file.  IF it doesn't exist (as in a normal Django project), navigate to the same directory as 'manage.py' and create a 'requirements.txt' file
+
+```
+touch requirements.txt
+```
+
+Now we can use pip freeze to create a requirements file conataining all packages and version ready to install in production:
+
+```
+pip freeze -r requirements.txt
+```
+
+=================================================
+
 **BASE.HTML**
 
 In django and wagtail projects, the base.html file is the html page that calls content from other templates inside {% block content%} and is used as the base of every page.
