@@ -230,7 +230,7 @@ DATABASES = {
 } 
 ```
 
-NOTE: 
+NOTE!!: Above we set 'INNNODB' instead of 'MYISAM' in the 'OPTIONS' key.
 
 18. **Perform first migration**
 
