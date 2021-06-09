@@ -560,7 +560,9 @@ This overrides the message you see when you go to log in at the admin page:
 **DJANGO MODELS -**
 **MODEL ADMIN** allows you to add django models to the admin page.
 
-You can use django fields AND wagtail fields on your models, so you can enhance the best parts of Django with more fields and you can then integrate your models into Wagtail pages.
+You can use normal django fields AND wagtail fields on your models. 
+
+Wagtail has many fields that you can use in a CMS such as 'RichTextField'. It is similar to the Wordpress text editor.
 
 Let's create a new app called 'surgeries' and it's models, and create and add models to the admin dashboard under a menu heading called 'MANAGE SURGERIES'
 
@@ -605,7 +607,6 @@ NOTE: Verbose plural names added to 'city' and 'surgery' models to correctly dis
 
 NOTE: Extra methods (doctors_list in 'Surgery' and specializations_list in 'Doctor') created to display the ManyToMany and ForeignKey fields in the admin dashboard list_display.
 
-NOTE: We have added a Wagtail field called RichTextField. It is similar to the Wordpress text editor.
 
 ```
 from django.db import models
